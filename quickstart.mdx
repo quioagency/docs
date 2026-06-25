@@ -1,47 +1,95 @@
 ---
-title: "Quickstart"
-description: "Begin with a guide on the fastest path to a successful outcome"
+title: "Get Started with Company Brain in 5 Minutes"
+sidebarTitle: "Quick Start"
+description: "Create your account, connect a knowledge source, and get your first AI-generated answer with source citations — all in under five minutes."
 ---
 
-Describe how someone begins using your product. What is the first thing they need to do? Are there any prerequisites?
-
-A quickstart should take someone from zero to using your product. They'll get a quick win and a sense of what they can accomplish.
-
-## Prerequisites
-
-Before you begin, you must have:
-
-- Requirement one (for example, Node.js 18+, a free account, an API key)
-- Requirement two (for example, a compatible device, a compatible browser, a compatible operating system)
-
-## Get started
+This guide walks you through everything you need to go from zero to your first answer. By the end, you'll have a connected knowledge source, an indexed knowledge base, and a real response from the Company Brain AI assistant.
 
 <Steps>
-  <Step title="Install">
-    Describe how to install your product or sign up.
 
-    ```bash
-    npm install your-package
-    ```
-  </Step>
-  <Step title="Configure">
-    Describe any setup or configuration needed before first use.
+  <Step title="Create Your Account">
+    Navigate to [app.companybrain.ai/signup](https://app.companybrain.ai/signup) and enter your work email address and a password. Company Brain will send a verification email to the address you provided.
 
-    ```bash
-    your-cli init
-    ```
-  </Step>
-  <Step title="Run it">
-    Show the first thing a user does to see it working.
+    Open the email and click **Verify my email** to activate your account. If the email doesn't arrive within two minutes, check your spam folder or click **Resend verification email** on the signup page.
 
-    ```bash
-    your-cli start
-    ```
+    <Info>
+      Using Google or Microsoft SSO? Click **Continue with Google** or **Continue with Microsoft** on the signup page to skip the email verification step entirely.
+    </Info>
   </Step>
+
+  <Step title="Create a Workspace">
+    After verifying your email, you'll be prompted to create your first workspace. A workspace is the container for your organization's knowledge — it holds your connected sources, indexed content, members, and settings.
+
+    1. Enter a **Workspace Name**. Use your company or team name (for example, `Acme Corp` or `Product Team`).
+    2. Select a **Plan**. Choose the Free plan to explore Company Brain with up to three sources, or select a paid plan to unlock unlimited sources and advanced features.
+    3. Click **Create Workspace**.
+
+    You'll land on the workspace dashboard, where you can manage sources, run queries, and invite teammates.
+  </Step>
+
+  <Step title="Connect Your First Source">
+    Company Brain pulls knowledge from the tools your team already uses. In this step, you'll connect Google Drive as your first knowledge source.
+
+    1. In the left sidebar, click **Sources**.
+    2. Click **Add Source** in the top-right corner.
+    3. Select **Google Drive** from the integration catalogue.
+    4. Click **Authenticate with Google** and sign in with the Google account that has access to the files you want to index. Grant the requested permissions — Company Brain requests read-only access.
+    5. After authenticating, you'll see your Google Drive folder tree. Select the folders you want to include in your knowledge base. You can choose specific folders or select **All of My Drive**.
+    6. Click **Save and Start Sync**.
+
+    <Warning>
+      Company Brain will only index files you explicitly select. Deselecting a folder later removes its content from your knowledge base during the next sync cycle.
+    </Warning>
+
+    <Tabs>
+      <Tab title="What Gets Indexed">
+        Company Brain indexes Google Docs, Sheets (as structured text), Slides (speaker notes and slide text), and PDFs stored in Drive. Binary files such as images, videos, and audio are skipped.
+      </Tab>
+      <Tab title="Permissions">
+        Company Brain inherits the sharing settings of your Google Drive files. If a file is restricted to specific users, only workspace members with access to that file will receive answers sourced from it.
+      </Tab>
+    </Tabs>
+  </Step>
+
+  <Step title="Wait for Indexing">
+    As soon as you save your source, Company Brain begins ingesting and indexing your content. You'll see a progress indicator on the **Sources** page showing the current sync status.
+
+    - **Small workspaces** (fewer than 500 documents) typically finish indexing within two to five minutes.
+    - **Large workspaces** (thousands of documents) may take up to 30 minutes for the initial index.
+
+    You don't need to stay on the page — Company Brain sends you an email when indexing is complete. You can also refresh the **Sources** page and look for the green **Synced** badge next to your source.
+
+    <Info>
+      After the initial index, Company Brain runs incremental syncs every hour by default. Any new or updated documents appear in your knowledge base within the next sync window. You can trigger a manual sync at any time from the **Sources** page.
+    </Info>
+  </Step>
+
+  <Step title="Ask Your First Question">
+    With your source indexed, you're ready to query your knowledge base. Click the **Ask** button in the top navigation bar — or press `⌘K` (Mac) / `Ctrl+K` (Windows) — to open the question bar.
+
+    Type a question in plain English. For example:
+
+    ```text
+    What is our refund policy?
+    ```
+
+    Press **Enter** or click the send icon. Company Brain will return an answer in seconds.
+
+    **Understanding the answer format:**
+
+    - **Answer text** — A direct, concise response synthesized from your knowledge base.
+    - **Source citations** — Numbered references (e.g., `[1]`, `[2]`) appear inline in the answer text. Click any citation to open the source document directly.
+    - **Confidence indicator** — A signal showing how strongly the answer is grounded in your indexed content. High confidence means multiple sources support the answer.
+    - **Follow-up suggestions** — Related questions you might want to ask next, generated automatically from the context of your answer.
+
+    <Note>
+      If Company Brain can't find a confident answer in your knowledge base, it will tell you so explicitly rather than guessing. You can configure **Escalation** to route unanswered questions to a Slack channel or a designated team member. See [Escalation](/assistant/overview) for setup instructions.
+    </Note>
+  </Step>
+
 </Steps>
 
 <Tip>
-  Give people a way to get help. This could be a link to a support page, a chat with a customer support agent, or a forum for your product.
-
-  Example: Need help? Reach out to us at [support@yourcompany.com](mailto:support@yourcompany.com).
+  Google Drive is just one of many integrations. Company Brain also connects to Notion, Slack, Confluence, SharePoint, Zendesk, and more. See the full list and setup guides in the [Integrations Overview](/integrations/overview).
 </Tip>

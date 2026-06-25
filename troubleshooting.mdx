@@ -1,0 +1,157 @@
+---
+title: "Troubleshooting Common Issues in Company Brain"
+sidebarTitle: "Troubleshooting"
+description: "Diagnose and fix the most common problems in Company Brain, from sync errors and indexing failures to Slack bot issues and billing limits."
+---
+
+Most issues in Company Brain fall into one of a handful of categories: a source that lost its connection, a document that didn't make it through indexing, or a permission that wasn't configured quite right. Work through the relevant section below to get back on track. Each item walks you through the most likely cause and the exact steps to resolve it.
+
+## Source & Sync Issues
+
+<Accordion title='My source shows an "Error" status'>
+  An **Error** status almost always means Company Brain can no longer authenticate with the source. This happens when an OAuth token expires, a password changes, or a service account is revoked.
+
+  **To resolve:**
+
+  1. Go to **Sources** in the left sidebar.
+  2. Click the source showing the Error status.
+  3. Click **Reconnect** and complete the OAuth authorization flow for that integration.
+  4. Once reconnected, Company Brain will automatically queue a fresh sync. The status will change to **Syncing**, then **Active** when complete.
+
+  <Tip>
+    If the source returns to Error status after reconnecting, check that the account you're authorizing still has access to the underlying content in the source tool (e.g., confirm the Google account still has access to the Drive folder you're trying to index).
+  </Tip>
+</Accordion>
+
+<Accordion title="My documents aren't being indexed">
+  If documents appear in your source tool but not in your Company Brain knowledge base, work through these checks in order:
+
+  1. **Check the file type.** Company Brain supports PDF, DOCX, TXT, MD, HTML, and CSV files, as well as native formats from connected integrations (Notion pages, Google Docs, Confluence articles). Files in unsupported formats are silently skipped.
+  2. **Check the file size.** Individual files must be under **50 MB**. Files exceeding this limit are skipped during indexing.
+  3. **Check source permissions.** The account connected to Company Brain must have at least **read** access to the document. Open the source tool and confirm the connected account can view the file directly.
+  4. **Trigger a manual sync.** Go to **Sources → [your source] → Sync Now** and wait for the sync to complete, then search for the document again.
+
+  If a specific document still doesn't appear after a manual sync, contact support@companybrain.ai with the document name and source type so we can investigate.
+</Accordion>
+
+<Accordion title="Sync is taking too long">
+  Sync duration depends on the size of the source. For reference:
+
+  - A **first-time sync** of a large Confluence space or a Google Drive folder with thousands of documents can take **up to 60 minutes**.
+  - **Subsequent syncs** are incremental — only changed or new documents are processed — and typically complete in under 5 minutes.
+
+  You can monitor sync progress in real time by going to **Sources** and watching the **Last Synced** and **Documents Indexed** counters update.
+
+  <Info>
+    If a sync has been stuck in the **Syncing** status for more than 2 hours, refresh the page. If the status hasn't moved, contact support@companybrain.ai with the source name and we'll investigate the pipeline.
+  </Info>
+</Accordion>
+
+---
+
+## AI Assistant Issues
+
+<Accordion title="The assistant says it doesn't know the answer but the document exists">
+  This usually means the relevant document hasn't been successfully indexed yet, or the source is in an error state. Run through these steps:
+
+  1. Go to **Sources** and confirm the source containing the document shows an **Active** status. If it shows **Error**, follow the reconnection steps in the Source & Sync Issues section above.
+  2. Check the **Last Synced** timestamp on the source. If the document was added to the source tool after the last sync, it won't be in the knowledge base yet.
+  3. Click **Sync Now** to trigger an immediate re-index of that source.
+  4. Once the sync completes, ask the same question again.
+
+  <Tip>
+    Try rephrasing your question. The assistant matches questions to documents semantically, so asking "What is our time-off policy?" and "How many vacation days do employees get?" may return different results even if they cover the same document.
+  </Tip>
+</Accordion>
+
+<Accordion title="Answers seem outdated">
+  If the assistant is referencing old information that has since been updated in your source tool, the knowledge base hasn't picked up the change yet. Force an immediate re-sync:
+
+  1. Go to **Sources** in the left sidebar.
+  2. Click the source that contains the updated document.
+  3. Click **Sync Now**.
+  4. Wait for the sync status to return to **Active**, then ask your question again.
+
+  Automatic syncs run every 24 hours. If your team updates documents frequently, consider upgrading to **Pro** or **Enterprise**, which offer configurable sync intervals as low as every hour.
+</Accordion>
+
+<Accordion title="The bot doesn't respond in Slack">
+  If you've typed `/brain ask ...` in Slack and received no response, or `@CompanyBrain` isn't replying when mentioned, work through these checks:
+
+  1. **Confirm the bot is in the channel.** The Company Brain bot must be explicitly invited to any channel where you want it to respond. Type `/invite @CompanyBrain` in the channel.
+  2. **Check the integration status.** Go to **Settings → Integrations → Slack** in the Company Brain app and confirm the integration shows as **Connected**.
+  3. **Reinstall the Slack app.** If the integration was connected before your Slack workspace was migrated or the app permissions were changed, click **Reconnect** on the Slack integration page and complete the authorization again.
+  4. **Check your plan.** The Slack integration requires a **Pro** or **Enterprise** plan. Verify your current plan under **Settings → Billing**.
+</Accordion>
+
+---
+
+## Access & Permissions
+
+<Accordion title="I can't see a source in the knowledge base">
+  Source visibility is controlled by workspace admins. If a source exists in your Company Brain workspace but you can't query its content, your account may not have been granted access to that source.
+
+  Ask your workspace admin to:
+
+  1. Go to **Sources → [the source] → Manage Access**.
+  2. Add your account (or the team group you belong to) to the source's access list.
+
+  If you're an admin and the source isn't visible to you either, check that it hasn't been accidentally deleted from the **Sources** list.
+</Accordion>
+
+<Accordion title="A team member can't log in">
+  If a colleague is unable to log in, the most common cause is that they haven't accepted their invitation yet, or the invitation link has expired (links are valid for **72 hours**).
+
+  **To resend an invitation:**
+
+  1. Go to **Settings → Team**.
+  2. Click the **Pending Invites** tab.
+  3. Find the team member's email address and click **Resend Invite**.
+
+  If their email doesn't appear in Pending Invites, they may have already accepted but are logging in with a different email address than the one invited. Ask them to check which address received the invitation.
+</Accordion>
+
+<Accordion title="I accidentally removed a team member">
+  Removing a team member revokes their access immediately, but their account data is not deleted. You can re-invite them at any time:
+
+  1. Go to **Settings → Team**.
+  2. Click **Invite Members**.
+  3. Enter the team member's email address and select their role.
+  4. Click **Send Invite**.
+
+  The team member will receive a new invitation email and regain access as soon as they accept it. Any personal API keys they had created will need to be regenerated — those are not restored when a member is re-invited.
+</Accordion>
+
+---
+
+## Billing & Plans
+
+<Accordion title="I hit the document limit">
+  When you reach your plan's document limit, Company Brain stops indexing new documents until you free up space or upgrade.
+
+  **Option 1 — Upgrade your plan:**
+  Go to **Settings → Billing** and select a higher tier. The new limit takes effect immediately, and any documents that were queued will begin indexing automatically.
+
+  **Option 2 — Remove unused sources:**
+  Go to **Sources**, identify sources with a high document count that your team rarely queries, and remove them. This frees up indexing capacity on your current plan.
+
+  <Warning>
+    Removing a source permanently deletes its indexed content from Company Brain. The original documents in your source tool are unaffected, but you'll need to re-sync if you want to add the source back later.
+  </Warning>
+</Accordion>
+
+<Accordion title="How do I cancel my subscription?">
+  You can cancel your subscription at any time without contacting support:
+
+  1. Go to **Settings → Billing**.
+  2. Click **Cancel Plan**.
+  3. Review the cancellation summary and confirm.
+
+  Your workspace remains fully active — with all Pro or Enterprise features — until the **end of your current billing period**. After that date, your workspace downgrades to the Free plan. No data is deleted during a downgrade, but sources exceeding the Free plan's limits will be paused until you remove sources or re-upgrade.
+</Accordion>
+
+---
+
+<Note>
+  Still stuck? Email us at **support@companybrain.ai** or start a live chat from the **help icon in the bottom-right corner** of the Company Brain app. Our support team responds within one business day on the Free plan, and within 4 hours on Pro and Enterprise.
+</Note>

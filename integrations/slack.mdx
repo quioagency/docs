@@ -1,0 +1,84 @@
+---
+title: "Connect Slack to Company Brain for Team Q&A"
+sidebarTitle: "Slack"
+description: "Add the Company Brain bot to your Slack workspace so your team can ask questions and get sourced answers without leaving Slack."
+---
+
+The Slack integration turns Company Brain into an always-available resource inside the communication tool your team already uses. Once connected, a Company Brain bot joins your Slack workspace and responds to questions from any channel it's been invited to — returning answers, confidence levels, and direct links to source documents, all within the conversation thread.
+
+## What the Slack Integration Does
+
+The integration adds a **Company Brain bot** to your Slack workspace. Team members interact with it using the `/brain ask` slash command, available in any channel or direct message. You can invite the bot to specific channels where questions are likely to come up — support channels, onboarding channels, or team-specific help desks. The bot does not read or index your Slack message history; it only responds to explicit `/brain ask` commands.
+
+## Set Up the Slack Integration
+
+<Steps>
+  <Step title="Open the Slack integration settings">
+    In Company Brain, navigate to **Settings → Integrations → Slack**, then click **Connect**.
+  </Step>
+  <Step title="Authorize Company Brain in Slack">
+    You'll be redirected to Slack's OAuth authorization screen. Review the requested permissions, then click **Allow**. Company Brain requests only the permissions it needs to post messages and respond to slash commands.
+  </Step>
+  <Step title="Confirm the bot has been added">
+    After authorization, you'll be redirected back to Company Brain. A confirmation message confirms the Company Brain bot has been added to your Slack workspace. You'll also see a welcome message from the bot in your Slack **#general** channel.
+  </Step>
+  <Step title="Invite the bot to relevant channels">
+    The bot is not added to any channels automatically. In each Slack channel where you want it available, type:
+    ```
+    /invite @CompanyBrain
+    ```
+  </Step>
+  <Step title="Ask your first question">
+    With the bot in a channel, any team member can ask a question using the slash command:
+    ```
+    /brain ask What is our vacation policy?
+    ```
+    The bot will reply in a thread within a few seconds.
+  </Step>
+</Steps>
+
+## Usage Examples
+
+Use `/brain ask` followed by any question in plain English. Here are some examples of what your team can ask:
+
+```
+/brain ask What is the engineering on-call rotation?
+```
+
+```
+/brain ask How do I submit an expense report?
+```
+
+```
+/brain ask Who is the contact for IT equipment requests?
+```
+
+```
+/brain ask What are the steps for deploying to production?
+```
+
+## Answer Format
+
+When the bot responds, it posts a **threaded reply** containing three elements:
+
+- **Answer** — A plain-English response synthesized from your indexed knowledge base
+- **Confidence** — A label (High, Medium, or Low) indicating how strongly the indexed content supports the answer
+- **Source link** — A direct link to the source document (Notion page, Google Doc, Confluence page, or uploaded file) where the answer was found
+
+If the answer draws from multiple sources, all relevant sources are listed.
+
+## Escalation Behavior
+
+If Company Brain cannot find a confident answer in the knowledge base, it doesn't guess. Instead, it posts a message in the channel acknowledging the question couldn't be answered, and simultaneously sends a notification to your configured **escalation channel** (set in **Settings → Escalation**) so a team member can follow up. This ensures no question goes unanswered.
+
+<Tip>
+  Invite the Company Brain bot to your **#onboarding** and **#help** channels first. These channels are where new hires and teammates are most likely to ask recurring questions — exactly the questions your knowledge base is built to answer.
+</Tip>
+
+## Remove the Slack Integration
+
+To disconnect Company Brain from your Slack workspace, navigate to **Settings → Integrations → Slack** and click **Disconnect**. This removes the bot from your workspace and revokes all permissions. Existing answers already posted in Slack threads are not deleted.
+
+<Warning>
+  Disconnecting the Slack integration immediately disables the `/brain ask` command for all users in your workspace. If you plan to reconnect later, you'll need to re-invite the bot to all channels.
+</Warning>

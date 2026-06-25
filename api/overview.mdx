@@ -1,0 +1,120 @@
+---
+title: "Company Brain REST API: Overview and Base URL"
+sidebarTitle: "Overview"
+description: "Learn how to use the Company Brain REST API to search your knowledge base, manage sources, and ingest documents programmatically with JSON over HTTPS."
+---
+
+The Company Brain REST API gives you programmatic access to everything your team does in the app: search the knowledge base, list and manage sources, ingest documents directly, and retrieve answer history. Every request goes over HTTPS and every response is JSON, making the API easy to integrate with any language or framework. This page covers the fundamentals — base URL, versioning, request and response formats, error codes, and rate limits — before you dive into individual endpoints.
+
+## Base URL
+
+All API requests target the following base URL:
+
+```
+https://api.companybrain.ai/v1
+```
+
+The version segment (`v1`) is part of the URL path. When a new major version is introduced, it will be available at a new path (e.g., `/v2`) while `/v1` continues to operate. You will always have at least **90 days' notice** before any breaking change takes effect — we'll announce deprecations by email, in-app banner, and in our changelog.
+
+## Authentication
+
+Every request must include a valid API key passed as a Bearer token in the `Authorization` header. If the header is missing or the key is invalid, the API returns a `401 Unauthorized` response.
+
+See the [Authentication guide](/api/authentication) for step-by-step instructions on creating and using API keys.
+
+## Request Format
+
+For `POST` and `PUT` requests, send a JSON body and include the `Content-Type: application/json` header. `GET` and `DELETE` requests do not require a body.
+
+```bash
+curl https://api.companybrain.ai/v1/search \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "What is our onboarding checklist?"}'
+```
+
+## Response Format
+
+All responses — both successful and error — are JSON objects. Successful responses use HTTP `2xx` status codes and wrap the returned resource in a `data` field alongside a `meta` object containing tracing information.
+
+### Success envelope
+
+```json
+{
+  "data": { },
+  "meta": {
+    "request_id": "req_01HXYZ",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+}
+```
+
+Include the `request_id` value whenever you contact support about an unexpected API response — it lets us trace the request end-to-end through our systems.
+
+### Error envelope
+
+When something goes wrong, the API returns an `error` object instead of `data`. The `code` field is a machine-readable string you can use for programmatic error handling.
+
+```json
+{
+  "error": {
+    "code": "not_found",
+    "message": "The requested resource was not found.",
+    "request_id": "req_01HXYZ"
+  }
+}
+```
+
+## Error Codes
+
+The table below lists every error code the API can return, along with its HTTP status and meaning.
+
+| HTTP Status | Code | Meaning |
+|---|---|---|
+| 400 | `bad_request` | The request body or query parameters are invalid. Check the `message` field for details on which parameter failed validation. |
+| 401 | `unauthorized` | The `Authorization` header is missing or the API key is invalid. |
+| 403 | `forbidden` | The API key is valid but does not have permission to perform this action. |
+| 404 | `not_found` | The requested resource does not exist, or you do not have permission to access it. |
+| 429 | `rate_limited` | You have exceeded your plan's request rate. Wait and retry using exponential back-off. |
+| 500 | `server_error` | An unexpected internal error occurred. Retry the request; if the problem persists, contact support with the `request_id`. |
+
+## Rate Limits
+
+Rate limits are enforced per API key and reset every 60 seconds.
+
+| Plan | Requests per Minute |
+|---|---|
+| Free | 60 |
+| Pro | 300 |
+| Enterprise | Custom (contact sales) |
+
+When you exceed your rate limit, the API returns a `429` response with a `Retry-After` header indicating the number of seconds to wait before retrying. Implement exponential back-off in your client to handle bursts gracefully.
+
+<Info>
+  Rate limit headers are included in every response so you can monitor consumption proactively:
+
+  - `X-RateLimit-Limit` — your plan's requests-per-minute ceiling
+  - `X-RateLimit-Remaining` — requests remaining in the current window
+  - `X-RateLimit-Reset` — Unix timestamp when the window resets
+</Info>
+
+## API Versioning
+
+The current stable version is **v1**. We follow these versioning principles:
+
+- **Non-breaking changes** (new optional fields, new endpoints) are added to `v1` without notice.
+- **Breaking changes** (removed fields, changed behavior) are only introduced in a new major version and are announced at least **90 days** in advance.
+- **Deprecated fields** are flagged in API responses with a `deprecated` annotation in our reference docs and will not be removed until the next major version.
+
+Subscribe to the [Company Brain status page](https://status.companybrain.ai) to receive maintenance and deprecation notifications.
+
+## Explore the API
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/api/authentication">
+    Learn how to create an API key and pass it correctly in your requests.
+  </Card>
+  <Card title="Search" icon="magnifying-glass" href="/api/search">
+    Query your knowledge base and retrieve sourced answers programmatically.
+  </Card>
+</CardGroup>

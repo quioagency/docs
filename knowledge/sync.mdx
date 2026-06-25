@@ -1,0 +1,101 @@
+---
+title: "Keeping Your Knowledge Base in Sync"
+sidebarTitle: "Sync"
+description: "Understand how Company Brain automatically syncs connected sources and learn how to trigger manual syncs and adjust sync frequency."
+---
+
+Company Brain syncs your connected sources automatically so your knowledge base always reflects the latest content from Notion, Google Drive, Slack, Confluence, and any other tools you've connected. When a sync runs, Company Brain checks each connected source for new, updated, and deleted documents, then updates the index accordingly — without you having to do anything. You can also trigger syncs on demand, adjust how often they run, and review the history of past syncs from each source's detail page.
+
+## Automatic Sync
+
+By default, Company Brain syncs all connected sources once every **24 hours**. The sync runs in the background during off-peak hours and processes only documents that have changed since the last sync, so it has minimal performance impact.
+
+Automatic sync handles three types of changes:
+
+- **New documents** — Newly created pages, files, or messages added to the source since the last sync are discovered and indexed.
+- **Updated documents** — Documents that have been modified are re-indexed with their latest content, replacing the previous version in your knowledge base.
+- **Deleted documents** — Documents removed from the source are detected and purged from the index, so your knowledge base doesn't surface stale or deleted content.
+
+<Note>
+  Sync only processes **changed documents**. If a document hasn't been modified since the last sync, Company Brain skips it entirely. This keeps sync times fast and avoids unnecessary re-indexing, even for very large knowledge bases.
+</Note>
+
+## Manual Sync
+
+If you've just made important updates to a connected source and can't wait for the next scheduled sync, you can trigger an immediate sync at any time.
+
+<Steps>
+  <Step title="Go to Sources">
+    Navigate to **Settings → Sources** to see all connected sources and their current status.
+  </Step>
+  <Step title="Select the Source">
+    Click the name of the source you want to sync immediately. This opens the source detail page.
+  </Step>
+  <Step title="Click Sync Now">
+    Click the **Sync Now** button in the top-right corner of the source detail page. The source status badge will change to **Syncing** (yellow) while the operation runs.
+  </Step>
+  <Step title="Wait for Completion">
+    When the sync finishes, the status badge returns to **Active** (green) and the **Last synced** timestamp updates. If any errors occurred, the badge changes to **Error** (red) and a summary appears in the sync history.
+  </Step>
+</Steps>
+
+<Tip>
+  Trigger a manual sync before important meetings or product launches when you know the source documentation has just been updated. This ensures the AI assistant is working from the most current version of your docs, not a version that may be up to 24 hours behind.
+</Tip>
+
+## Sync Frequency Options
+
+You can change how often Company Brain automatically syncs each connected source. Higher sync frequencies are available on paid plans.
+
+| Frequency | Plans | Best For |
+|-----------|-------|----------|
+| **Every 24 hours** (default) | All plans | Teams with stable documentation that changes infrequently |
+| **Every 12 hours** | Pro, Enterprise | Teams with moderately active knowledge bases |
+| **Every 6 hours** | Pro, Enterprise | Fast-moving teams that update docs frequently throughout the day |
+| **Real-time (webhooks)** | Enterprise | Teams that need changes reflected in the knowledge base within seconds of being made |
+
+To change the sync frequency for a source, go to **Settings → Sources**, click the source name, and select your preferred interval from the **Sync Frequency** dropdown on the detail page.
+
+<Info>
+  Real-time webhook sync requires configuration on both the Company Brain side and the source system. Your account manager can guide you through the setup process for Enterprise webhook integrations.
+</Info>
+
+## What Triggers a Sync
+
+A sync can be initiated in three ways, depending on your plan and configuration:
+
+<CardGroup cols={3}>
+  <Card title="Scheduled Interval" icon="clock">
+    The most common trigger. Company Brain automatically initiates a sync according to the frequency you've configured — every 24, 12, or 6 hours.
+  </Card>
+  <Card title="Manual Trigger" icon="hand-pointer">
+    You click **Sync Now** from a source's detail page. The sync begins immediately, regardless of when the last scheduled sync ran.
+  </Card>
+  <Card title="Webhook Event" icon="bolt">
+    Available on Enterprise plans. The source system sends a webhook to Company Brain whenever content changes, triggering a targeted sync of only the affected documents in near real-time.
+  </Card>
+</CardGroup>
+
+## Viewing Sync History
+
+Every sync — whether scheduled, manual, or webhook-triggered — is logged so you can diagnose issues and understand what changed.
+
+To view sync history for a source:
+
+1. Go to **Settings → Sources**.
+2. Click the source name to open its detail page.
+3. Scroll down to the **Sync History** section.
+
+The history table shows each sync run with the following details:
+
+| Column | Description |
+|--------|-------------|
+| **Started at** | The timestamp when the sync began. |
+| **Duration** | How long the sync took to complete. |
+| **Documents processed** | Number of new, updated, and deleted documents in that run. |
+| **Status** | `Success`, `Partial` (some documents failed), or `Failed`. |
+| **Error details** | For failed or partial syncs, a summary of what went wrong and which documents were affected. |
+
+<Tip>
+  If a sync shows a `Partial` status, expand the error details row to see which specific documents failed to index. You can often resolve these by checking that the source document hasn't been corrupted or moved outside the configured sync scope.
+</Tip>

@@ -1,0 +1,96 @@
+---
+title: "Searching and Browsing Your Knowledge Base"
+sidebarTitle: "Search"
+description: "Search your knowledge base with semantic or keyword search, filter results by source or date, and open original documents instantly."
+---
+
+Company Brain gives you direct access to your knowledge base through a dedicated search interface, separate from the AI assistant chat. While the AI assistant synthesizes answers across multiple documents, the knowledge base search lets you browse, filter, and navigate your indexed content directly — surfacing the exact documents, pages, and excerpts that match your query. You can search by meaning using natural language, search by exact keyword or phrase, and filter results by source, document type, or last-updated date.
+
+## Search Modes
+
+Company Brain supports two distinct search modes. You can switch between them using the toggle above the search bar in the Knowledge Base tab.
+
+### Semantic Search
+
+Semantic search finds documents based on the **meaning** of your query, not just whether the exact words appear in the text. It uses vector embeddings to match your query against the concepts and ideas in your indexed documents, even if they use different terminology.
+
+This makes semantic search ideal for exploratory or open-ended queries — when you know what you're looking for conceptually but aren't sure how it's phrased in the source material.
+
+<Tip>
+  Write semantic search queries the way you'd ask a colleague a question — for example, **"how do we handle refund requests from enterprise customers"** rather than **"refund enterprise"**. The more context you include, the more accurately Company Brain can match the right documents.
+</Tip>
+
+### Keyword Search
+
+Keyword search finds documents that contain the **exact phrase** or specific terms you enter. It works like a traditional text search and is most useful when you know exactly what you're looking for — a document title, a product code, an error message, or a specific policy name.
+
+Use keyword search when:
+- You're looking for a specific document by name.
+- You need to find all occurrences of a particular term, code, or identifier.
+- You want predictable, exact-match results rather than similarity-ranked matches.
+
+## How to Search
+
+<Steps>
+  <Step title="Open the Knowledge Base Tab">
+    Click **Knowledge Base** in the left-hand navigation panel. This opens the knowledge base browser, showing your most recently updated documents by default.
+  </Step>
+  <Step title="Type Your Query">
+    Click the **search bar** at the top of the page and type your query. You can enter a natural language question for semantic search, or a specific term or phrase for keyword search. Toggle between modes using the **Semantic / Keyword** switch above the search bar.
+  </Step>
+  <Step title="Review Your Results">
+    Results appear below the search bar as a ranked list of matching documents. Each result card displays:
+    - **Document title** — the name of the page or file.
+    - **Source** — the connected tool it came from (e.g., Notion, Google Drive).
+    - **Snippet** — the most relevant excerpt from the document, with your query terms highlighted.
+    - **Last updated** — when the document was last synced or modified.
+  </Step>
+  <Step title="Open a Document">
+    Click any result card to open the original document in its source system. For example, clicking a Notion result opens that page in Notion; clicking a Google Drive result opens the file in Google Docs or Drive. Company Brain never shows you a copy — you always work in the original tool.
+  </Step>
+</Steps>
+
+## Filtering Results
+
+Narrow your search results using the filter panel on the left side of the Knowledge Base tab. Filters stack — you can combine multiple filters at once.
+
+<Accordion title="Filter by Source">
+  Show only results from a specific connected tool. Select one or more sources — Notion, Google Drive, Slack, Confluence, or any other connected integration — from the **Source** filter. This is useful when you know the document lives in a particular tool.
+</Accordion>
+
+<Accordion title="Filter by Date Updated">
+  Restrict results to documents updated within a specific time window. Choose from preset ranges (**Last 7 days**, **Last 30 days**, **Last 90 days**) or set a custom date range using the date picker. This is helpful when you're looking for recently changed policies or documentation.
+</Accordion>
+
+<Accordion title="Filter by Document Type">
+  Filter results by file or content type — for example, show only PDFs, only Markdown files, or only Slack messages. The available document types reflect what's currently indexed in your knowledge base.
+</Accordion>
+
+## Searching via the API
+
+If you're building an internal tool, a custom interface, or an automated workflow that needs to query your Company Brain knowledge base programmatically, you can use the search API.
+
+Send a `POST` request to `/api/v1/search` with your query and optional filter parameters to get ranked search results in JSON format. The response includes document titles, source metadata, relevance scores, and text snippets — the same data shown in the UI.
+
+See the [Search API reference](/api/search) for full request and response schemas, authentication details, and code examples.
+
+<Info>
+  API search supports both semantic and keyword modes via the `mode` parameter. It also accepts the same source, date, and document type filters available in the UI, making it straightforward to replicate any UI search query programmatically.
+</Info>
+
+## Tips for Better Search Results
+
+<CardGroup cols={2}>
+  <Card title="Use Natural Language" icon="message">
+    For semantic search, write full questions or phrases rather than isolated keywords. Queries like "onboarding process for new sales hires" return more relevant results than "onboarding sales".
+  </Card>
+  <Card title="Switch Modes When Needed" icon="arrow-right-arrow-left">
+    If semantic search returns too many loosely related results, switch to keyword mode for exact-match precision — especially useful for error codes, product names, or legal terms.
+  </Card>
+  <Card title="Combine Filters" icon="sliders">
+    Stack source and date filters to zero in on the right document fast. Searching "Q3 pricing changes" filtered to Google Drive and the last 30 days is far more targeted than an unfiltered search.
+  </Card>
+  <Card title="Check Sync Status" icon="rotate">
+    If a recently updated document isn't showing up in results, check whether its source has synced recently. Trigger a manual sync from Settings → Sources if needed. See [Keeping Your Knowledge Base in Sync](/knowledge/sync) for details.
+  </Card>
+</CardGroup>

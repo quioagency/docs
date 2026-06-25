@@ -1,0 +1,118 @@
+---
+title: "Escalating Unanswered Questions to Your Team"
+sidebarTitle: "Escalation"
+description: "Learn how Company Brain routes unanswerable questions to the right person, how to configure escalation contacts, and how to close knowledge gaps."
+---
+
+When Company Brain can't find a confident answer in your knowledge base, it doesn't guess — it escalates. Rather than returning a low-quality response that might mislead you, the assistant surfaces the gap and routes the question to a designated person or Slack channel so a human expert can step in. Every escalation is also an opportunity: when someone answers, that answer can be added back to the knowledge base so the same question never goes unanswered twice.
+
+## When Escalation Triggers
+
+Escalation kicks in automatically under three conditions:
+
+<CardGroup cols={3}>
+  <Card title="Low Confidence Score" icon="signal-weak">
+    The assistant found some related content, but not enough to form a reliable answer. Rather than returning a potentially misleading response, it flags the question for human review.
+  </Card>
+  <Card title="No Relevant Documents Found" icon="file-slash">
+    A semantic search across your entire knowledge base returned no meaningfully relevant passages. The topic simply isn't documented yet.
+  </Card>
+  <Card title="Sensitive Question Flagged" icon="shield-exclamation">
+    Certain question categories — such as legal, HR, or compliance topics — can be pre-configured to always escalate, regardless of confidence, to ensure a verified human answer.
+  </Card>
+</CardGroup>
+
+## How Escalation Works
+
+<Steps>
+  <Step title="User asks a question">
+    A team member submits a question through the web app, Slack, or API — just like any other query.
+  </Step>
+  <Step title="Brain signals low confidence">
+    Instead of returning a speculative answer, the assistant responds with: **"I don't have enough information to answer this confidently."** The response includes what partial evidence was found (if any) and a clear prompt to escalate.
+  </Step>
+  <Step title="Escalation is triggered">
+    The user can click **"Escalate"** manually to send the question to the right person. If auto-escalation is enabled for the matched question category, this step happens automatically without any action from the user.
+  </Step>
+  <Step title="Escalation contact receives a notification">
+    The designated escalation contact — an individual, a team email, or a Slack channel — receives a notification containing the original question, any partial context the assistant found, and a link to respond directly.
+  </Step>
+  <Step title="Team member answers">
+    The escalation contact reviews the question and provides a verified answer. When they submit their response, the original asker is notified via their preferred channel (email or Slack). Optionally, the answer can be added back to the knowledge base in the same step.
+  </Step>
+</Steps>
+
+<Note>
+  Escalation notifications require at least one integration to be active. Configure **email** in Settings → Integrations → Email, or connect **Slack** in Settings → Integrations → Slack before setting up escalation contacts.
+</Note>
+
+## Configuring Escalation Contacts
+
+Escalation contacts determine who receives the notification when a question can't be answered. You can assign contacts by topic area, team, or set a single default for the whole workspace.
+
+<Steps>
+  <Step title="Open Escalation Settings">
+    Navigate to **Settings → AI Assistant → Escalation**.
+  </Step>
+  <Step title="Add a contact">
+    Click **Add Escalation Contact** and enter either:
+    - An **email address** (individual or team alias), or
+    - A **Slack channel** (e.g., `#knowledge-team`)
+
+    You can add multiple contacts and assign each one to specific question categories (e.g., route HR questions to `#hr-team` and engineering questions to `#eng-ops`).
+  </Step>
+  <Step title="Configure auto-escalation rules (optional)">
+    Under **Auto-Escalation**, enable automatic routing for specific categories without requiring the user to click "Escalate." Toggle on any category — Legal, Compliance, Security, HR, or a custom label — and assign it to the appropriate contact.
+  </Step>
+  <Step title="Save and test">
+    Click **Save**. Use the **Send Test Notification** button to confirm that your escalation contact receives the notification correctly before going live.
+  </Step>
+</Steps>
+
+<Warning>
+  If no escalation contact is configured, the assistant will still surface a "I don't have enough information" response, but no notification will be sent. Make sure at least one default contact is set so questions don't fall into a void.
+</Warning>
+
+## Reviewing the Escalation Log
+
+Every escalated question — whether triggered automatically or manually — is recorded in the escalation log. This log is one of the most useful tools for identifying systematic gaps in your knowledge base.
+
+To access it, navigate to **Settings → Escalation Log**. The log shows:
+
+| Column | Description |
+|---|---|
+| Question | The original question submitted by the user |
+| Asked by | The team member who submitted the question |
+| Date | When the question was escalated |
+| Status | Open, In Progress, or Resolved |
+| Resolved by | The escalation contact who answered |
+| Added to KB | Whether the answer was added to the knowledge base |
+
+Use filters to narrow by date range, status, or escalation contact. Export the log as a CSV from the **Export** button in the top-right corner.
+
+<Tip>
+  Review the escalation log **weekly** to spot recurring questions that haven't been documented. If the same topic appears three or more times in a month, it's a strong signal that you need a new knowledge base article. Use the "Add to knowledge base" action on those entries to create draft documents directly from the resolved answers.
+</Tip>
+
+## Adding Answers Back to the Knowledge Base
+
+Escalation isn't just a workaround — it's a feedback loop for making your knowledge base more complete over time. When a team member resolves an escalation, they can publish the answer directly to the knowledge base without leaving the escalation flow.
+
+<Steps>
+  <Step title="Resolve the escalation">
+    From the escalation notification (email or Slack) or the Escalation Log in Settings, click **Resolve** and type or paste your answer.
+  </Step>
+  <Step title="Click 'Add to knowledge base'">
+    Before submitting, toggle on **Add to knowledge base**. You'll be prompted to choose a destination: an existing document to append to, or a new document to create.
+  </Step>
+  <Step title="Set a title and location">
+    Give the new content a descriptive title and choose the folder or space where it should live (e.g., your Notion HR wiki or a Google Drive policies folder).
+  </Step>
+  <Step title="Publish">
+    Click **Save and Publish**. The answer is added to the knowledge base and immediately indexed — the next time someone asks the same question, Company Brain will answer it confidently without escalating.
+  </Step>
+</Steps>
+
+<Info>
+  Content added via the escalation flow is indexed within a few minutes. If you're on a large workspace with heavy indexing load, it may take up to 15 minutes before the new content is reflected in answers.
+</Info>

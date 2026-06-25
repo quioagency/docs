@@ -1,0 +1,81 @@
+---
+title: "Index Google Drive Files with Company Brain"
+sidebarTitle: "Google Drive"
+description: "Connect Google Drive to index Docs, Sheets, and PDFs so your team can search and query file contents through Company Brain."
+---
+
+Connecting Google Drive lets Company Brain read and index the documents your team stores there. After a quick OAuth authorization, you select which folders to include, and Company Brain begins extracting text from supported file types — making all that content searchable and queryable through plain-English questions.
+
+## What Gets Indexed
+
+Company Brain indexes the following file types from your connected Google Drive:
+
+- **Google Docs** — Full text content, including headings, body text, tables, and lists
+- **Google Sheets** — Cell content across all sheets (formatted as structured text for indexing)
+- **PDF files** — Text extracted from PDFs using optical character recognition where needed
+- **Plain text files** — `.txt` and `.md` files stored in Drive
+
+## What Is Not Indexed
+
+The following file types are not supported and will be skipped during indexing:
+
+- Google Slides presentations
+- Image files (`.jpg`, `.png`, `.gif`, etc.)
+- Video files
+- Binary files and proprietary formats (e.g., `.xlsx`, `.docx` not converted to Google format)
+- Google Drive Shortcuts (the target file may be indexed if it exists within an included folder)
+
+## Connect Google Drive to Company Brain
+
+<Steps>
+  <Step title="Open the Google Drive source settings">
+    In Company Brain, navigate to **Settings → Sources → Add Source**, then select **Google Drive** from the list of available sources.
+  </Step>
+  <Step title="Sign in with Google">
+    Click **Sign in with Google**. You'll be redirected to Google's OAuth consent screen. Review the permissions Company Brain is requesting — read-only access to your Drive files — then click **Allow**.
+  </Step>
+  <Step title="Select folders to index">
+    After authorizing, you'll be prompted to choose which Drive content to include. You can select from:
+    - **My Drive** — Indexes your entire personal Drive
+    - **Shared Drives** — Select specific shared drives accessible to the connected account
+    - **Specific folders** — Browse and select individual folders to scope the index precisely
+  </Step>
+  <Step title="Confirm your selection">
+    Click **Confirm**. Company Brain begins indexing the selected folders immediately. A progress indicator appears as files are discovered and processed.
+  </Step>
+  <Step title="Track indexing progress">
+    Monitor the status of your Google Drive index in **Sources → Google Drive**. You'll see total files discovered, files indexed, and any files that were skipped due to unsupported formats.
+  </Step>
+</Steps>
+
+## Managing Folder Selection
+
+You can update your folder selection at any time from **Sources → Google Drive → Edit Folders**. Adding a new folder queues its contents for indexing on the next sync. Removing a folder excludes new changes from future syncs, but the content already indexed from that folder remains in your knowledge base until the next sync removes it.
+
+By default, selecting a folder includes all of its **subfolders**. To exclude a specific subfolder, deselect it individually in the folder picker.
+
+## Permissions and Access
+
+Company Brain only indexes files that the connected Google account has **read access** to. Files shared with specific individuals, files in shared drives, and files with domain-wide access are all indexed if the connected account can read them. Files outside the connected account's permissions are silently skipped.
+
+<Tip>
+  In larger organizations, connect Google Drive using a **dedicated service account** with access to all relevant Shared Drives. This prevents the index from breaking if an individual employee's account is deactivated or their Drive access changes. Contact your Google Workspace admin to set up a service account and share the appropriate drives with it.
+</Tip>
+
+## Sync Behavior
+
+<Accordion title="How does Company Brain detect changes in Drive?">
+  Company Brain checks your connected Google Drive folders every **24 hours** for new, updated, and deleted files. When a file is updated in Drive, Company Brain re-indexes it on the next sync so answers always reflect the current version. When a file is deleted from Drive, it is removed from the knowledge base on the next sync cycle.
+</Accordion>
+
+<Accordion title="Can I trigger a manual sync?">
+  Yes. Navigate to **Sources → Google Drive** and click **Sync Now** to trigger an immediate sync. This is useful after a large batch of document updates or when you've just moved files into a newly included folder.
+</Accordion>
+
+<Info>
+  Company Brain requests only **read-only** OAuth scopes for Google Drive. It never creates, modifies, or deletes files in your Drive.
+</Info>
+
+<Warning>
+  Removing the Google Drive source from **Settings → Sources** permanently deletes all indexed Drive content from your Company Brain knowledge base. Reconnecting the integration will trigger a full re-index.
+</Warning>

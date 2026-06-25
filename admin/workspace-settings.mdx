@@ -1,0 +1,131 @@
+---
+title: "Configuring Your Company Brain Workspace"
+sidebarTitle: "Workspace Settings"
+description: "Manage workspace-level settings in Company Brain, including general preferences, AI behavior, security policies, and billing details."
+---
+
+Workspace settings give administrators centralized control over how Company Brain behaves for everyone in the organization. From here, you can tailor everything from your workspace's display name and branding to sync schedules, AI assistant behavior, security rules, and your current billing plan. Only users with the Admin role can access these settings.
+
+## Accessing Workspace Settings
+
+To open the settings panel, click your **workspace name** in the top-left corner of the Company Brain interface, then select **Settings** from the dropdown menu. The settings panel is organized into five categories, each described below.
+
+<Note>
+  Most changes take effect immediately after saving. Settings that require additional processing — such as SSO configuration — will display an estimated propagation time on the page.
+</Note>
+
+---
+
+## Settings Categories
+
+<CardGroup cols={2}>
+  <Card title="General" icon="sliders">
+    Control your workspace's identity — name, logo, timezone, and default language.
+  </Card>
+  <Card title="Knowledge Base" icon="database">
+    Configure how Company Brain ingests and manages your connected documents.
+  </Card>
+  <Card title="AI Assistant" icon="robot">
+    Tune how the AI responds, including language, confidence handling, and escalation.
+  </Card>
+  <Card title="Security" icon="shield-halved">
+    Define who can join your workspace and how access is authenticated and logged.
+  </Card>
+  <Card title="Billing" icon="credit-card">
+    Review your current plan, monitor usage, and upgrade or downgrade at any time.
+  </Card>
+</CardGroup>
+
+---
+
+### General
+
+The **General** tab controls your workspace's core identity settings:
+
+- **Workspace Name** — The name displayed in the top-left corner and in all email notifications sent to your team.
+- **Logo** — Upload a PNG or SVG (max 2 MB) to replace the default Company Brain icon in the sidebar.
+- **Timezone** — Sets the reference timezone for scheduled syncs, audit logs, and usage reports.
+- **Default Language** — The language used across the UI for all workspace members. Individual users can override this in their personal preferences.
+
+#### Changing Your Workspace Name
+
+<Steps>
+  <Step title="Open General Settings">
+    Navigate to **Settings** → **General**.
+  </Step>
+  <Step title="Click the Workspace Name Field">
+    Click directly on the workspace name field at the top of the page. The field becomes editable.
+  </Step>
+  <Step title="Type the New Name">
+    Clear the existing name and type your desired workspace name. Workspace names must be between 3 and 64 characters.
+  </Step>
+  <Step title="Save Your Changes">
+    Click **Save**. The new name appears immediately in the sidebar and in all future notifications.
+  </Step>
+</Steps>
+
+---
+
+### Knowledge Base
+
+The **Knowledge Base** tab controls how Company Brain fetches, stores, and indexes content from your connected sources:
+
+- **Default Sync Frequency** — How often Company Brain re-indexes connected sources to pick up new or updated documents. This can be overridden per source. See [plan limits](#plan-limits) for the minimum sync interval available on your plan.
+- **Maximum Document Size** — The largest individual file Company Brain will attempt to index. Files exceeding this limit are skipped and flagged in the sync log. The default maximum is 50 MB per file.
+- **Supported File Types** — Company Brain indexes plain text, Markdown, PDF, DOCX, PPTX, XLSX, and HTML by default. Toggle additional experimental formats (e.g., `.eml`, `.epub`) on or off from this tab.
+
+<Tip>
+  If you notice certain documents are never returned in answers, check the sync log at **Settings → Knowledge Base → Sync History** to see if they were skipped due to size or unsupported format.
+</Tip>
+
+---
+
+### AI Assistant
+
+The **AI Assistant** tab controls how Company Brain formulates and delivers answers:
+
+- **Response Language** — The language the assistant uses when composing answers. By default, the assistant matches the language of the question asked. Set a fixed language here to enforce consistent responses across your workspace.
+- **Confidence Threshold** — A percentage value (0–100) representing the minimum confidence score required before the assistant delivers an answer. Questions that fall below this threshold are escalated instead of answered directly. The default is **60%**.
+- **Escalation Contacts** — One or more email addresses or Slack handles that receive escalation notifications when the assistant cannot answer a question with sufficient confidence. Add at least one contact to ensure no question goes unanswered.
+
+<Info>
+  Increasing the confidence threshold produces more reliable answers but results in more escalations. Lowering it reduces escalations but may surface lower-quality responses. A threshold between 55% and 70% works well for most teams.
+</Info>
+
+---
+
+### Security
+
+The **Security** tab governs who can access your workspace and how that access is audited:
+
+- **Allowed Email Domains** — Restrict self-service signups to specific domains (e.g., `@yourcompany.com`). Anyone signing up with an email outside the allowed list will be blocked unless explicitly invited by an admin.
+- **SSO Configuration** *(Enterprise only)* — Connect your identity provider (Okta, Azure AD, Google Workspace, or any SAML 2.0-compatible provider) to enforce single sign-on for all workspace members. Once SSO is enabled, password-based logins are disabled.
+- **Audit Log Retention** — Set how long Company Brain retains audit records of admin actions, source connections, and member changes. The default retention period is **90 days**; Enterprise plans can extend this to up to **3 years**.
+
+<Warning>
+  Enabling SSO will immediately invalidate all active password-based sessions. Notify your team before making this change to avoid unexpected logouts.
+</Warning>
+
+---
+
+### Billing
+
+The **Billing** tab shows your current subscription plan, live usage metrics, and options to change your plan:
+
+- **Current Plan** — Displays your active plan (Free, Pro, or Enterprise) and the current billing cycle end date.
+- **Usage** — Live counters for indexed documents, storage consumed, active members, and connected sources, each shown against your plan's limit.
+- **Upgrade / Downgrade** — Click **Change Plan** to move to a different tier. Upgrades take effect immediately; downgrades take effect at the end of the current billing period.
+
+---
+
+## Plan Limits
+
+Use the table below to compare what each plan includes. Upgrade at any time from **Settings → Billing**.
+
+| Feature          | Free      | Pro        | Enterprise  |
+|------------------|-----------|------------|-------------|
+| Documents        | 100       | 10,000     | Unlimited   |
+| Storage          | 50 MB     | 10 GB      | Unlimited   |
+| Members          | 5         | 50         | Unlimited   |
+| Sources          | 2         | 10         | Unlimited   |
+| Sync Frequency   | Every 24h | Every 6h   | Real-time   |

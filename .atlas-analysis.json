@@ -1,30 +1,11 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
+  "projectType": "saas",
+  "projectName": "Company Brain",
+  "projectDescription": "Company Brain is an AI-powered knowledge management platform that captures, organizes, and surfaces your organization's collective knowledge so teams and AI agents can find answers instantly.",
   "theme": "almond",
-  "name": "Company Brain",
-  "colors": {
-    "primary": "#ef7025",
-    "light": "#eec9bc",
-    "dark": "#4fa1ab"
-  },
-  "favicon": "/favicon.svg",
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:support@companybrain.ai"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Get Started",
-      "href": "https://app.companybrain.ai/signup"
-    }
-  },
+  "primaryColor": "#ef7025",
+  "lightColor": "#eec9bc",
+  "darkColor": "#4fa1ab",
   "navigation": {
     "tabs": [
       {
@@ -105,10 +86,26 @@
       }
     ]
   },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/companybrain",
-      "linkedin": "https://linkedin.com/company/companybrain"
-    }
-  }
+  "keyFeatures": [
+    "AI-powered question answering grounded in company documents",
+    "Automatic ingestion from Notion, Google Drive, Slack, Confluence, and more",
+    "Continuous sync to keep the knowledge base current",
+    "Role-based access control for sensitive content",
+    "Escalation routing when the brain doesn't have an answer",
+    "REST API and webhooks for custom integrations",
+    "Query logging and knowledge gap analytics",
+    "Multi-channel access: Slack, web widget, API"
+  ],
+  "publicApiSurface": [
+    "POST /api/v1/search",
+    "GET /api/v1/knowledge",
+    "POST /api/v1/knowledge",
+    "DELETE /api/v1/knowledge/{id}",
+    "GET /api/v1/sources",
+    "POST /api/v1/sources",
+    "DELETE /api/v1/sources/{id}",
+    "POST /api/v1/webhooks",
+    "GET /api/v1/webhooks",
+    "DELETE /api/v1/webhooks/{id}"
+  ]
 }

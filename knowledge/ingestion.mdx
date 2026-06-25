@@ -1,0 +1,96 @@
+---
+title: "Ingesting Documents into Your Knowledge Base"
+sidebarTitle: "Ingestion"
+description: "Learn how to add documents to your Company Brain knowledge base through connected sources or direct file upload."
+---
+
+Ingestion is the process by which Company Brain reads, processes, and indexes content so it becomes searchable and available to the AI assistant. You can bring content into your knowledge base in two ways: by connecting external tools like Notion, Google Drive, Slack, or Confluence so that Company Brain indexes them automatically, or by uploading files directly when you have standalone documents that aren't tied to a connected source. Once ingested, documents are chunked, embedded, and stored in your knowledge base — typically within a few minutes.
+
+## Two Ways to Add Content
+
+<CardGroup cols={2}>
+  <Card title="Connected Sources" icon="plug">
+    Link external tools like Notion, Google Drive, Slack, and Confluence. Company Brain automatically indexes their content and keeps it in sync. See [Managing Knowledge Sources](/knowledge/sources) for setup instructions.
+  </Card>
+  <Card title="Direct Upload" icon="arrow-up-from-bracket">
+    Upload individual files (PDF, DOCX, TXT, MD, and more) directly to your knowledge base. Ideal for internal documents, exports, and files that live outside your connected tools.
+  </Card>
+</CardGroup>
+
+## Uploading Files Directly
+
+Use the direct upload flow when you have documents on your local machine or files exported from systems that don't have a native Company Brain integration.
+
+<Steps>
+  <Step title="Open Settings">
+    Click the **Settings** icon in the bottom-left navigation bar to open your workspace settings.
+  </Step>
+  <Step title="Navigate to Knowledge Base">
+    Select **Knowledge Base** from the left-hand settings menu. You'll see a list of all currently ingested documents and connected sources.
+  </Step>
+  <Step title="Click Upload Files">
+    Click the **Upload Files** button in the top-right corner of the Knowledge Base panel. A file picker dialog will open.
+  </Step>
+  <Step title="Select Your Files">
+    Choose one or more files from your local machine. You can select multiple files at once. Each file must be under 50 MB, and the total upload must not exceed your plan's storage limit.
+  </Step>
+  <Step title="Confirm and Wait for Indexing">
+    Click **Confirm Upload**. Company Brain will begin ingesting your files immediately. Each file will appear in the document list with a **Indexing** status badge. Once processing is complete, the badge changes to **Ready**.
+  </Step>
+</Steps>
+
+<Note>
+  Indexing typically takes between 1 and 5 minutes per source or file, depending on size and complexity. Large documents with many pages or dense tables may take slightly longer. You can continue using Company Brain while indexing runs in the background.
+</Note>
+
+## Supported File Types
+
+Company Brain can ingest the following file formats when uploading directly. Each format is processed differently to extract the most useful text content.
+
+| File Type | Extension | Notes |
+|-----------|-----------|-------|
+| PDF | `.pdf` | Text layers are extracted. Scanned PDFs without OCR may return limited content. |
+| Word Document | `.docx` | Full text, headings, and table content are indexed. |
+| Plain Text | `.txt` | Ingested as-is with no formatting processing. |
+| Markdown | `.md` | Headings and structure are preserved during indexing. |
+| HTML | `.html` | Page text is extracted; scripts and styles are stripped. |
+| CSV | `.csv` | Row and column data is indexed as structured text. |
+
+<Note>
+  Images embedded in documents — including scanned PDFs, PNG/JPG files, and image-only slides — are **not** indexed. Company Brain extracts text content only. If your document is primarily image-based, consider adding a text summary alongside it.
+</Note>
+
+## Ingestion Limits by Plan
+
+Your plan determines how many documents you can ingest and how much total storage your knowledge base can use. Documents from both connected sources and direct uploads count toward these limits.
+
+<Tabs>
+  <Tab title="Free">
+    - **Maximum documents:** 100
+    - **Maximum storage:** 50 MB
+    - **Connected sources:** Up to 2
+    - **Direct upload:** Supported
+
+    The Free plan is best suited for individuals or small teams evaluating Company Brain. Once you reach the document or storage limit, new uploads and source syncs will be paused until you upgrade or remove existing content.
+  </Tab>
+  <Tab title="Pro">
+    - **Maximum documents:** 10,000
+    - **Maximum storage:** 10 GB
+    - **Connected sources:** Up to 10
+    - **Direct upload:** Supported
+
+    The Pro plan supports growing teams with large knowledge bases. Sync frequency options expand to 6-hour intervals, and you gain access to advanced filtering in search.
+  </Tab>
+  <Tab title="Enterprise">
+    - **Maximum documents:** Unlimited
+    - **Maximum storage:** Unlimited
+    - **Connected sources:** Unlimited
+    - **Direct upload:** Supported
+
+    Enterprise plans include real-time webhook-based sync, dedicated ingestion pipelines, and SLA-backed indexing times. Contact your account manager to configure custom limits and retention policies.
+  </Tab>
+</Tabs>
+
+## Next Steps
+
+Once your documents are ingested, you can connect additional external tools to keep your knowledge base growing automatically. See [Managing Knowledge Sources](/knowledge/sources) to learn how to add Notion, Google Drive, Slack, and Confluence as connected sources.

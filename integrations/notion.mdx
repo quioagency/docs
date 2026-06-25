@@ -1,0 +1,76 @@
+---
+title: "Sync Notion Pages and Databases with Company Brain"
+sidebarTitle: "Notion"
+description: "Connect your Notion workspace to automatically index pages, databases, and nested content so your team can query it through Company Brain."
+---
+
+Connecting Notion gives Company Brain access to the wikis, docs, and structured data your team maintains there. Once authorized, Company Brain indexes the pages and databases you choose to share and keeps them in sync automatically — so when your team asks a question, the answer reflects the latest version of your Notion content.
+
+## What Gets Indexed
+
+Company Brain indexes the following Notion content types:
+
+- **Pages** — Full text content of all shared pages, including headings, paragraphs, lists, callouts, and code blocks
+- **Database rows** — The text content of database properties and page bodies within databases (treated as individual documents)
+- **Nested sub-pages** — Sub-pages within shared pages are indexed automatically, including multiple levels of nesting
+- **Inline databases** — Databases embedded within pages are indexed alongside the parent page content
+
+## What Is Not Indexed
+
+The following content types are not currently supported:
+
+- Images and image captions
+- Embedded files and file attachments
+- Synced blocks that pull in content from external tools
+- Formulas and rollups in database properties (only raw text values are indexed)
+
+## Connect Notion to Company Brain
+
+<Steps>
+  <Step title="Open the Notion source settings">
+    In Company Brain, navigate to **Settings → Sources → Add Source**, then select **Notion** from the list of available sources.
+  </Step>
+  <Step title="Start the Notion authorization flow">
+    Click **Connect Notion**. You'll be redirected to Notion's authorization page where you can log in to your Notion account if you aren't already.
+  </Step>
+  <Step title="Select pages and databases to share">
+    On the Notion authorization page, select the specific pages and databases you want Company Brain to access. You can select top-level pages (which includes all their sub-pages) or individual databases.
+  </Step>
+  <Step title="Complete authorization">
+    Click **Allow access**. Notion grants Company Brain read-only access to the pages and databases you selected, and you'll be redirected back to Company Brain.
+  </Step>
+  <Step title="Monitor indexing progress">
+    Company Brain begins indexing your selected Notion content immediately. Track progress in **Sources → Notion**. Initial indexing time depends on the size of your workspace — a few hundred pages typically completes in under ten minutes.
+  </Step>
+</Steps>
+
+## Adjusting Your Scope
+
+After the initial connection, you can change which pages and databases Company Brain has access to at any time. Navigate to **Settings → Sources → Notion → Edit Scope** to add new pages or remove ones you no longer want indexed.
+
+<Note>
+  Company Brain can only index Notion pages that have been explicitly shared with the integration. If you create new pages after the initial connection and want them indexed, you must return to **Edit Scope** to add them — or share the parent page so all sub-pages are included automatically.
+</Note>
+
+## Sync Frequency and Manual Sync
+
+<Tabs>
+  <Tab title="Automatic Sync">
+    Company Brain syncs your connected Notion content every **24 hours** by default. Each sync picks up new pages, updated content, and detects deleted pages (which are then removed from the index).
+  </Tab>
+  <Tab title="Manual Sync">
+    To sync immediately — for example, after making a significant update to a page — go to **Sources → Notion** and click **Sync Now**. Manual syncs run in the background and typically complete within a few minutes.
+  </Tab>
+</Tabs>
+
+## Permissions and Access
+
+Company Brain accesses Notion using the permissions granted during authorization. It only reads the pages and databases you explicitly shared — it cannot access any other content in your Notion workspace. The integration uses read-only access and never writes to or modifies your Notion content.
+
+<Accordion title="What happens if I change Notion page permissions?">
+  If you restrict access to a page in Notion after it's been indexed, Company Brain will still serve the cached version of that content until the next sync. After the next sync, the page will be removed from the index if Company Brain can no longer access it. To remove content immediately, use the manual sync option or remove the page from your scope in **Edit Scope**.
+</Accordion>
+
+<Warning>
+  Removing the Notion source from **Settings → Sources** permanently deletes all indexed Notion content from your Company Brain knowledge base. This action cannot be undone. If you want to pause syncing without losing indexed content, contact support for guidance.
+</Warning>

@@ -1,0 +1,101 @@
+---
+title: "Managing Knowledge Sources in Company Brain"
+sidebarTitle: "Sources"
+description: "Connect, configure, and remove external tools like Notion, Google Drive, Slack, and Confluence as knowledge sources."
+---
+
+Sources are the external systems that feed content into your Company Brain knowledge base. When you connect a source, Company Brain authenticates with that tool, crawls its content according to the scope you define, and indexes everything so it becomes searchable and available to the AI assistant. You can connect multiple sources at once, configure which parts of each tool get indexed, and monitor their sync status — all from the Sources settings panel.
+
+## Adding a New Source
+
+Connecting a new source takes just a few steps. Company Brain uses OAuth or API tokens to authenticate — you won't need to copy-paste content manually.
+
+<Steps>
+  <Step title="Open Settings">
+    Click the **Settings** icon in the bottom-left navigation bar to open your workspace settings.
+  </Step>
+  <Step title="Go to Sources">
+    Select **Sources** from the left-hand settings menu. You'll see all currently connected sources and their sync status.
+  </Step>
+  <Step title="Click Add Source">
+    Click the **Add Source** button in the top-right corner. A modal will appear listing all available integrations.
+  </Step>
+  <Step title="Choose a Provider">
+    Select the tool you want to connect — for example, Notion, Google Drive, Slack, or Confluence. If you don't see a tool listed, check the [integrations roadmap](https://companybrain.com/roadmap) for upcoming additions.
+  </Step>
+  <Step title="Authenticate">
+    You'll be redirected to the provider's authorization page. Sign in with the account that has access to the content you want to index, then grant Company Brain the requested permissions. You'll be returned to the Sources panel automatically after authorization succeeds.
+  </Step>
+  <Step title="Configure Scope">
+    After authentication, select which parts of the tool to index — for example, specific Notion workspaces, Google Drive folders, or Slack channels. You can always adjust scope later from the source detail page. Click **Save** to begin the initial sync.
+  </Step>
+</Steps>
+
+## Removing a Source
+
+You can disconnect a source at any time from the Sources list. Removing a source stops future syncs and deletes all indexed content that came from that source.
+
+<Warning>
+  Removing a source **permanently deletes** all content indexed from that source from your knowledge base. This action cannot be undone. The original documents in the external tool are not affected, but any answers, citations, or search results that referenced that source's content will no longer be available. If you want to pause syncing without losing indexed content, use the **Pause Sync** option instead.
+</Warning>
+
+To remove a source:
+
+1. Navigate to **Settings → Sources**.
+2. Locate the source you want to remove in the list.
+3. Click the **three-dot menu (⋯)** to the right of the source name.
+4. Select **Remove Source** from the dropdown.
+5. Confirm the deletion in the dialog that appears.
+
+## Source Status Indicators
+
+Each source in the Sources list displays a colored status badge that reflects its current state. Check these indicators regularly to ensure your knowledge base is up to date.
+
+<CardGroup cols={3}>
+  <Card title="Active" icon="circle-check" color="#22c55e">
+    **Green.** The source is connected and the last sync completed successfully. Content from this source is fully available in your knowledge base.
+  </Card>
+  <Card title="Syncing" icon="rotate" color="#eab308">
+    **Yellow.** A sync is currently in progress. New or updated documents are being indexed. The source is still queryable during this time, but very recently changed content may not appear yet.
+  </Card>
+  <Card title="Error" icon="circle-exclamation" color="#ef4444">
+    **Red.** The last sync failed. This typically means the authentication token has expired, permissions have changed, or the source system returned an error. Click the source to see the error details and re-authenticate if needed.
+  </Card>
+</CardGroup>
+
+## Configuring Source Scope
+
+When you first connect a source — or at any time afterward — you can control exactly which content gets indexed. Narrowing the scope reduces noise in your knowledge base and keeps indexing focused on the most relevant material.
+
+To edit scope, go to **Settings → Sources**, click the source name to open its detail page, and then click **Edit Scope**.
+
+<Accordion title="Notion">
+  Choose specific **workspaces**, **pages**, or **databases** to include. By default, Company Brain requests access to your full Notion workspace but only indexes top-level pages and their children. You can exclude specific pages or entire database views from the scope configuration panel.
+</Accordion>
+
+<Accordion title="Google Drive">
+  Select specific **folders** or **shared drives** to index. You can also restrict indexing to files owned by specific users. By default, all files you have access to in Drive are included — narrow this down to avoid indexing personal or unrelated files.
+</Accordion>
+
+<Accordion title="Slack">
+  Choose which **public channels** to index. Company Brain only indexes public channels — direct messages and private channels are never accessible. Select channels by name from the channel picker after authentication.
+</Accordion>
+
+<Accordion title="Confluence">
+  Select one or more **spaces** to index. You can include all pages in a space or limit indexing to specific page trees. Archived pages are excluded by default but can be optionally included.
+</Accordion>
+
+## What Gets Indexed Per Source
+
+Different source systems expose different types of content. The table below summarizes what Company Brain indexes from each supported integration and what is excluded.
+
+| Source | What's Indexed | What's Excluded |
+|--------|---------------|-----------------|
+| **Notion** | Pages, database entries, inline text, page titles | Synced databases from external sources, embedded files, images |
+| **Google Drive** | Google Docs (text), Google Sheets (cell values), PDFs | Google Slides, binary files, files larger than 50 MB |
+| **Slack** | Messages in public channels, thread replies | DMs, private channels, files and attachments, message reactions |
+| **Confluence** | Space pages, page body text, inline tables | Macros output, attachments, archived spaces (unless enabled) |
+
+<Info>
+  If you need to index content types not currently supported — such as Google Slides or Confluence attachments — you can export those files and upload them directly via [direct upload](/knowledge/ingestion).
+</Info>

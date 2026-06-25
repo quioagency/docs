@@ -1,0 +1,92 @@
+---
+title: "Access Control and Permissions in Company Brain"
+sidebarTitle: "Access Control"
+description: "Use role-based access control and source-level permissions to manage who can view, edit, and administer knowledge in Company Brain."
+---
+
+Company Brain uses role-based access control (RBAC) to ensure team members only see and manage the knowledge they need. Every workspace member is assigned a role that determines what actions they can take — from asking the AI assistant questions to modifying workspace settings. On top of role-level permissions, administrators can apply source-level restrictions to lock down sensitive content to specific people or teams.
+
+---
+
+## Roles and Permissions
+
+Company Brain has four built-in roles. Assign the most restrictive role appropriate for each person's responsibilities — you can change roles at any time from the **Team** settings page.
+
+| Role    | Ask Questions | View Sources | Manage Sources | Manage Members | Workspace Settings |
+|---------|:---:|:---:|:---:|:---:|:---:|
+| Viewer  | ✓ | ✓ | — | — | — |
+| Member  | ✓ | ✓ | — | — | — |
+| Editor  | ✓ | ✓ | ✓ | — | — |
+| Admin   | ✓ | ✓ | ✓ | ✓ | ✓ |
+
+<Accordion title="What does each role mean in practice?">
+  **Viewer** — Read-only participants. Viewers can query the AI assistant and read the sources they have been granted access to, but cannot connect new sources or invite others. Use this role for external stakeholders or executives who need answers without managing content.
+
+  **Member** — The default role for most employees. Members have the same permissions as Viewers but are considered internal team members in reporting and audit logs.
+
+  **Editor** — Trusted contributors who need to connect, configure, or remove knowledge sources. Editors can also trigger manual syncs and manage source-level access for sources they own. They cannot invite members or change workspace-wide settings.
+
+  **Admin** — Full control over the workspace. Admins manage members, configure settings, control billing, and have access to all sources regardless of source-level restrictions.
+</Accordion>
+
+---
+
+## Source-Level Access
+
+Beyond workspace roles, you can restrict individual sources so that only specific members or roles can see — and receive answers from — that content. This is useful for sensitive knowledge bases such as HR policies, executive strategy documents, or legal files.
+
+**Example:** You connect a Google Drive folder called `HR Policies` to Company Brain. By default, all workspace members can ask questions answered from that folder. You can restrict it so that only members with the `HR Team` role can access it — everyone else's queries will not draw from that source.
+
+### Restricting a Source
+
+<Steps>
+  <Step title="Open Source Settings">
+    Navigate to **Settings → Sources**. You will see a list of all connected knowledge sources.
+  </Step>
+  <Step title="Select the Source">
+    Click the name of the source you want to restrict to open its configuration panel.
+  </Step>
+  <Step title="Open the Access Tab">
+    Click the **Access** tab within the source configuration panel.
+  </Step>
+  <Step title="Change the Access Level">
+    Switch the access setting from **All Members** to either **Selected Roles** or **Selected Members**, depending on how granularly you want to control access.
+  </Step>
+  <Step title="Choose Who Has Access">
+    Use the search field to find and select the specific roles or individual members who should be able to access this source. Everyone not selected will be excluded.
+  </Step>
+  <Step title="Save">
+    Click **Save**. The restriction takes effect immediately — the AI assistant will stop using this source for excluded users right away.
+  </Step>
+</Steps>
+
+<Warning>
+  When you restrict a source, the AI assistant will **not** use it to answer questions for users who lack access. Those users may receive incomplete or less accurate answers if the restricted source contains relevant information. Communicate source restrictions to your team so they understand why certain questions may not be fully answered.
+</Warning>
+
+---
+
+## Guest Access
+
+Admins can invite people outside the organization as **guests**. Guests are automatically assigned the **Viewer** role and can only access the specific sources you grant them — they cannot browse the full source list or see workspace settings.
+
+To invite a guest, follow the standard invite flow at **Settings → Team → Invite Members** and enter an external email address. After the invite is accepted, go to **Settings → Sources**, open each source the guest should access, and add them individually under the **Access** tab.
+
+<Tabs>
+  <Tab title="Internal Members">
+    Internal members inherit access to all sources by default (unless a source is restricted). Assign the role that matches their responsibilities, and tighten source access only where required by policy.
+  </Tab>
+  <Tab title="External Guests">
+    Guests start with no source access. An admin must explicitly grant access to each source after the guest accepts their invite. Guests cannot be elevated beyond the Viewer role.
+  </Tab>
+</Tabs>
+
+---
+
+## Auditing Permissions
+
+<Tip>
+  Review your source permissions at least quarterly. As teams change and projects wrap up, it is easy for access to drift — former contractors may still be listed as members, or a sensitive source may have been opened to all members during a busy period and never re-restricted. A quarterly audit keeps your knowledge base secure and your audit logs clean.
+</Tip>
+
+You can export a full permissions report from **Settings → Security → Export Permissions Report**. The report lists every source, its current access level, and the roles or members with access — formatted as a CSV for easy review in a spreadsheet.

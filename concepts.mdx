@@ -1,0 +1,126 @@
+---
+title: "Key Concepts: How Company Brain Works"
+sidebarTitle: "Concepts"
+description: "Learn the core building blocks of Company Brain — from workspaces and knowledge sources to queries, answers, escalation, and access control."
+---
+
+Before diving into advanced configuration, it helps to understand the mental model behind Company Brain. The platform is built around a small set of clearly defined concepts that interact in a predictable way: you connect sources, Company Brain ingests and indexes them into a knowledge base, and your team queries that knowledge base through an AI assistant that always grounds its answers in your real documents.
+
+## Core Concepts
+
+<Accordion title="Workspace">
+  A **workspace** is the top-level container for your organization's knowledge in Company Brain. Think of it as your team's private instance of the platform.
+
+  Every workspace has its own:
+  - **Knowledge sources** — the external tools and files connected to it
+  - **Knowledge base** — the indexed content ingested from those sources
+  - **Members** — the people who can access and query the workspace
+  - **Settings** — sync schedules, escalation rules, access control policies, and more
+
+  Most companies create a single workspace. Large organizations sometimes create separate workspaces per department (for example, `Engineering` and `Customer Success`) to keep knowledge bases focused and permissions cleanly separated.
+</Accordion>
+
+<Accordion title="Knowledge Source">
+  A **knowledge source** is any external system or file collection connected to your workspace. Company Brain currently supports the following source types:
+
+  - **SaaS integrations** — Notion, Google Drive, Confluence, Slack, SharePoint, Zendesk, and more
+  - **File uploads** — PDFs, Word documents, Markdown files, and plain text uploaded directly to Company Brain
+  - **Web crawls** — public URLs or internal documentation sites that Company Brain can scrape and index
+
+  Each source is configured independently. You choose which folders, channels, or pages to include, and Company Brain respects the access permissions already set in the source system.
+</Accordion>
+
+<Accordion title="Knowledge Base">
+  The **knowledge base** is the indexed, searchable store of all content ingested from your connected sources. It's the engine behind every answer Company Brain generates.
+
+  When content is ingested, Company Brain:
+  1. Extracts text from each document.
+  2. Splits the text into semantically meaningful chunks.
+  3. Generates vector embeddings for each chunk to enable similarity-based retrieval.
+  4. Stores both the raw text and the embeddings in your workspace's isolated knowledge base.
+
+  You never query the knowledge base directly — the AI assistant handles retrieval automatically when you ask a question. However, you can browse the knowledge base from the **Sources** page to verify what content has been indexed.
+</Accordion>
+
+<Accordion title="Sync">
+  **Sync** is the continuous process Company Brain uses to keep your knowledge base current as documents in your source systems change.
+
+  There are two types of sync:
+
+  - **Initial sync** — runs once when you first connect a source. Company Brain ingests all selected content and builds the knowledge base from scratch.
+  - **Incremental sync** — runs on a schedule (hourly by default) after the initial sync. Company Brain detects new, updated, and deleted documents and applies only those changes to the knowledge base, keeping it fresh without reprocessing everything.
+
+  You can adjust the sync frequency — or trigger a manual sync at any time — from the **Sources** page in your workspace settings.
+
+  <Note>
+    Deleting a document from a connected source removes it from the knowledge base during the next incremental sync. Answers that previously cited that document will no longer reference it.
+  </Note>
+</Accordion>
+
+<Accordion title="Query">
+  A **query** is a plain-language question submitted to the Company Brain AI assistant. You don't need a special syntax — just ask the way you'd ask a knowledgeable colleague.
+
+  Effective queries are specific and context-rich. For example:
+
+  ```text
+  What are the eligibility requirements for our enterprise refund policy?
+  ```
+
+  is more likely to return a precise answer than:
+
+  ```text
+  refund policy
+  ```
+
+  Company Brain supports follow-up questions within a session, so you can ask clarifying questions and the assistant will maintain context from earlier in the conversation.
+</Accordion>
+
+<Accordion title="Answer">
+  An **answer** is the AI-generated response to your query. Every answer Company Brain produces is grounded in specific documents from your knowledge base — the assistant never fabricates information or draws on knowledge outside your indexed content.
+
+  Each answer includes:
+
+  - **Response text** — a direct, synthesized answer in plain language.
+  - **Inline citations** — numbered references (e.g., `[1]`, `[2]`) embedded in the text, each linking to the exact source document and passage used.
+  - **Confidence level** — a signal indicating how strongly the answer is supported by your indexed content.
+
+  If the knowledge base doesn't contain enough information to answer confidently, Company Brain will say so explicitly rather than guessing, and — if configured — will escalate the question to a human.
+</Accordion>
+
+<Accordion title="Escalation">
+  **Escalation** is the mechanism Company Brain uses when it cannot find a confident answer in your knowledge base. Instead of returning a low-quality or speculative response, it routes the unanswered question to a designated person or channel so a human can respond.
+
+  You can configure escalation targets in your workspace settings:
+
+  - **Slack channel** — posts the unanswered question (and the original asker's identity, if permitted) to a chosen channel.
+  - **Email address** — sends an escalation notification to one or more team members.
+  - **Webhook** — delivers a structured JSON payload to any endpoint, for custom workflows.
+
+  Escalation responses can be fed back into the knowledge base as a new document, so the next person who asks the same question gets an instant answer.
+</Accordion>
+
+<Accordion title="Access Control">
+  **Access control** governs which workspace members can see which knowledge sources and the answers derived from them. Company Brain enforces permissions at two levels:
+
+  - **Workspace roles** — `Owner`, `Admin`, `Member`, and `Viewer` roles control who can manage sources, invite teammates, change settings, and query the knowledge base.
+  - **Source-level permissions** — individual knowledge sources can be restricted to specific members or teams. A member without access to a source will not receive answers sourced from its content, even if they submit an identical query to someone who does have access.
+
+  Company Brain also inherits permissions from your source systems where supported. For example, a Google Drive file restricted to certain users in Drive remains restricted when accessed through Company Brain.
+
+  <Warning>
+    Access control settings take effect immediately. Changing a member's role or revoking access to a source updates their permissions in real time — they will no longer receive answers sourced from restricted content on their next query.
+  </Warning>
+</Accordion>
+
+## Next Steps
+
+Now that you understand how the pieces fit together, explore the detailed guides for ingesting content and using the AI assistant.
+
+<CardGroup cols={2}>
+  <Card title="Knowledge Ingestion" icon="database" href="/knowledge/ingestion">
+    Learn how Company Brain processes documents, handles different file types, and manages sync schedules.
+  </Card>
+  <Card title="Assistant Overview" icon="message-bot" href="/assistant/overview">
+    Explore the full capabilities of the AI assistant — including follow-up questions, escalation, and query history.
+  </Card>
+</CardGroup>
