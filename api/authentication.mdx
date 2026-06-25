@@ -1,7 +1,7 @@
 ---
-title: "Authenticate Requests to the Company Brain API"
+title: "API Authentication: Keys, Bearer Tokens, and Errors"
 sidebarTitle: "Authentication"
-description: "Create an API key in the Company Brain dashboard and pass it as a Bearer token to authenticate every request to the REST API."
+description: "Create an API key in the Company Brain dashboard, pass it as a Bearer token on every request, and learn how to handle 401 and 403 authentication errors."
 ---
 
 Company Brain uses API keys to authenticate requests to the REST API. Every call you make must include your API key as a Bearer token in the `Authorization` header. If the header is absent or the key is invalid, the API responds with a `401 Unauthorized` error and no data is returned. Keep your keys safe — treat them with the same care as passwords.

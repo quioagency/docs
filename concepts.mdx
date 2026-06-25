@@ -1,7 +1,7 @@
 ---
-title: "Key Concepts: How Company Brain Works"
+title: "Key Concepts: Understanding How Company Brain Works"
 sidebarTitle: "Concepts"
-description: "Learn the core building blocks of Company Brain — from workspaces and knowledge sources to queries, answers, escalation, and access control."
+description: "Learn the core building blocks of Company Brain — from workspaces and knowledge sources to queries, answers, webhooks, and access control."
 ---
 
 Before diving into advanced configuration, it helps to understand the mental model behind Company Brain. The platform is built around a small set of clearly defined concepts that interact in a predictable way: you connect sources, Company Brain ingests and indexes them into a knowledge base, and your team queries that knowledge base through an AI assistant that always grounds its answers in your real documents.
@@ -28,18 +28,40 @@ Before diving into advanced configuration, it helps to understand the mental mod
   - **Web crawls** — public URLs or internal documentation sites that Company Brain can scrape and index
 
   Each source is configured independently. You choose which folders, channels, or pages to include, and Company Brain respects the access permissions already set in the source system.
+
+  You can manage sources programmatically using the Sources API:
+
+  ```bash
+  # List all connected sources
+  curl https://api.companybrain.ai/v1/sources \
+    -H "Authorization: Bearer YOUR_API_TOKEN"
+  ```
+
+  ```bash
+  # Remove a source
+  curl -X DELETE https://api.companybrain.ai/v1/sources/{id} \
+    -H "Authorization: Bearer YOUR_API_TOKEN"
+  ```
 </Accordion>
 
 <Accordion title="Knowledge Base">
-  The **knowledge base** is the indexed, searchable store of all content ingested from your connected sources. It's the engine behind every answer Company Brain generates.
+  The **knowledge base** is the indexed, searchable store of all content ingested from your connected sources. It is the engine behind every answer Company Brain generates.
 
-  When content is ingested, Company Brain:
-  1. Extracts text from each document.
-  2. Splits the text into semantically meaningful chunks.
-  3. Generates vector embeddings for each chunk to enable similarity-based retrieval.
-  4. Stores both the raw text and the embeddings in your workspace's isolated knowledge base.
+  When you connect a source, Company Brain processes each document and makes it instantly queryable. You never need to manage the index directly — Company Brain handles ingestion, updates, and deletions automatically as your source documents change.
 
-  You never query the knowledge base directly — the AI assistant handles retrieval automatically when you ask a question. However, you can browse the knowledge base from the **Sources** page to verify what content has been indexed.
+  You can browse what has been indexed from the **Sources** page in your workspace. You can also add or remove individual documents through the Knowledge API:
+
+  ```bash
+  # List indexed knowledge items
+  curl https://api.companybrain.ai/v1/knowledge \
+    -H "Authorization: Bearer YOUR_API_TOKEN"
+  ```
+
+  ```bash
+  # Remove a specific item from the knowledge base
+  curl -X DELETE https://api.companybrain.ai/v1/knowledge/{id} \
+    -H "Authorization: Bearer YOUR_API_TOKEN"
+  ```
 </Accordion>
 
 <Accordion title="Sync">
@@ -73,6 +95,18 @@ Before diving into advanced configuration, it helps to understand the mental mod
   ```
 
   Company Brain supports follow-up questions within a session, so you can ask clarifying questions and the assistant will maintain context from earlier in the conversation.
+
+  You can also submit queries programmatically using the Search API:
+
+  ```bash
+  curl -X POST https://api.companybrain.ai/v1/search \
+    -H "Authorization: Bearer YOUR_API_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "query": "What are the eligibility requirements for our enterprise refund policy?",
+      "limit": 5
+    }'
+  ```
 </Accordion>
 
 <Accordion title="Answer">
@@ -97,6 +131,45 @@ Before diving into advanced configuration, it helps to understand the mental mod
   - **Webhook** — delivers a structured JSON payload to any endpoint, for custom workflows.
 
   Escalation responses can be fed back into the knowledge base as a new document, so the next person who asks the same question gets an instant answer.
+</Accordion>
+
+<Accordion title="Webhooks">
+  **Webhooks** let you subscribe to events in Company Brain and receive real-time notifications at an endpoint of your choice. When a subscribed event occurs — such as a sync completing, a new document being indexed, or an escalation being triggered — Company Brain sends a POST request with a structured JSON payload to your configured URL.
+
+  Common use cases include:
+
+  - Triggering a downstream workflow when a knowledge source finishes syncing
+  - Logging escalated questions to an internal ticketing system
+  - Refreshing a cached view when new content is indexed
+
+  Manage webhooks through the API:
+
+  ```bash
+  # Register a webhook
+  curl -X POST https://api.companybrain.ai/v1/webhooks \
+    -H "Authorization: Bearer YOUR_API_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "url": "https://your-app.example.com/hooks/companybrain",
+      "events": ["sync.completed", "escalation.created"]
+    }'
+  ```
+
+  ```bash
+  # List all registered webhooks
+  curl https://api.companybrain.ai/v1/webhooks \
+    -H "Authorization: Bearer YOUR_API_TOKEN"
+  ```
+
+  ```bash
+  # Delete a webhook
+  curl -X DELETE https://api.companybrain.ai/v1/webhooks/{id} \
+    -H "Authorization: Bearer YOUR_API_TOKEN"
+  ```
+
+  <Note>
+    Company Brain signs each webhook payload with an HMAC-SHA256 signature. Verify the `X-CompanyBrain-Signature` header in your endpoint handler to ensure requests are authentic.
+  </Note>
 </Accordion>
 
 <Accordion title="Access Control">

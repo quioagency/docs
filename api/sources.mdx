@@ -1,5 +1,5 @@
 ---
-title: "Sources API: Manage Knowledge Sources via REST"
+title: "Sources API: List, Create, and Delete Knowledge Sources"
 sidebarTitle: "Sources"
 description: "Use the Sources API to list connected knowledge sources, create upload sources for direct ingestion, and remove sources along with their indexed content."
 ---
@@ -8,9 +8,7 @@ A source is the origin of indexed content in Company Brain — it can be a conne
 
 ## List sources
 
-<br />
-
-### GET /sources
+### GET /api/v1/sources
 
 Retrieve all knowledge sources currently connected to your workspace. Use this endpoint to inspect sync status, check document counts, or fetch source IDs for use with the Knowledge and Search APIs.
 
@@ -93,9 +91,7 @@ curl https://api.companybrain.ai/v1/sources \
 
 ## Create a source
 
-<br />
-
-### POST /sources
+### POST /api/v1/sources
 
 Create a new upload source. Upload sources act as named containers for documents you push directly to the knowledge base via `POST /knowledge`. Creating separate upload sources for different teams or content types makes it easier to filter searches and manage content independently.
 
@@ -176,9 +172,7 @@ curl -X POST https://api.companybrain.ai/v1/sources \
 
 ## Delete a source
 
-<br />
-
-### DELETE /sources/{id}
+### DELETE /api/v1/sources/{id}
 
 Remove a source from your workspace. This immediately stops any future syncing and purges all content that was indexed from that source.
 

@@ -1,5 +1,5 @@
 ---
-title: "Company Brain REST API: Overview and Base URL"
+title: "Company Brain REST API: Overview, Errors, and Rate Limits"
 sidebarTitle: "Overview"
 description: "Learn how to use the Company Brain REST API to search your knowledge base, manage sources, and ingest documents programmatically with JSON over HTTPS."
 ---
@@ -90,13 +90,13 @@ Rate limits are enforced per API key and reset every 60 seconds.
 
 When you exceed your rate limit, the API returns a `429` response with a `Retry-After` header indicating the number of seconds to wait before retrying. Implement exponential back-off in your client to handle bursts gracefully.
 
-<Info>
+<Note>
   Rate limit headers are included in every response so you can monitor consumption proactively:
 
   - `X-RateLimit-Limit` — your plan's requests-per-minute ceiling
   - `X-RateLimit-Remaining` — requests remaining in the current window
   - `X-RateLimit-Reset` — Unix timestamp when the window resets
-</Info>
+</Note>
 
 ## API Versioning
 
@@ -116,5 +116,14 @@ Subscribe to the [Company Brain status page](https://status.companybrain.ai) to 
   </Card>
   <Card title="Search" icon="magnifying-glass" href="/api/search">
     Query your knowledge base and retrieve sourced answers programmatically.
+  </Card>
+  <Card title="Knowledge" icon="book" href="/api/knowledge">
+    List, upload, and delete documents in your workspace knowledge base.
+  </Card>
+  <Card title="Sources" icon="plug" href="/api/sources">
+    Inspect connected sources, create upload buckets, and remove sources.
+  </Card>
+  <Card title="Webhooks" icon="bell" href="/api/webhooks">
+    Register endpoints to receive real-time event notifications.
   </Card>
 </CardGroup>

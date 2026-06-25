@@ -1,10 +1,10 @@
 ---
-title: "Get Started with Company Brain in 5 Minutes"
+title: "Quickstart: Get Your First Answer from Company Brain"
 sidebarTitle: "Quick Start"
 description: "Create your account, connect a knowledge source, and get your first AI-generated answer with source citations — all in under five minutes."
 ---
 
-This guide walks you through everything you need to go from zero to your first answer. By the end, you'll have a connected knowledge source, an indexed knowledge base, and a real response from the Company Brain AI assistant.
+This guide walks you through everything you need to go from zero to your first answer. By the end, you'll have a connected knowledge source, an indexed knowledge base, and a real response from the Company Brain AI assistant — both through the UI and the REST API.
 
 <Steps>
 
@@ -86,6 +86,50 @@ This guide walks you through everything you need to go from zero to your first a
     <Note>
       If Company Brain can't find a confident answer in your knowledge base, it will tell you so explicitly rather than guessing. You can configure **Escalation** to route unanswered questions to a Slack channel or a designated team member. See [Escalation](/assistant/overview) for setup instructions.
     </Note>
+  </Step>
+
+  <Step title="Query the API">
+    You can also query your knowledge base programmatically using the Company Brain REST API. Retrieve your API token from **Workspace Settings → API Keys**, then send a search request:
+
+    ```bash
+    curl -X POST https://api.companybrain.ai/v1/search \
+      -H "Authorization: Bearer YOUR_API_TOKEN" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "query": "What is our refund policy?",
+        "limit": 5
+      }'
+    ```
+
+    A successful response returns an AI-generated answer along with the source documents that support it:
+
+    ```json
+    {
+      "answer": "Customers may request a full refund within 30 days of purchase by contacting support@example.com.",
+      "sources": [
+        {
+          "id": "src_abc123",
+          "title": "Refund Policy — Customer Handbook",
+          "url": "https://drive.google.com/file/d/...",
+          "excerpt": "Full refunds are available within 30 days of the original purchase date..."
+        }
+      ],
+      "confidence": "high"
+    }
+    ```
+
+    <Tip>
+      Use the `limit` parameter to control how many source documents are returned alongside the answer. The default is `5`; the maximum is `20`.
+    </Tip>
+
+    You can also list the knowledge sources connected to your workspace:
+
+    ```bash
+    curl https://api.companybrain.ai/v1/sources \
+      -H "Authorization: Bearer YOUR_API_TOKEN"
+    ```
+
+    See the full [API Reference](/api/overview) for all available endpoints.
   </Step>
 
 </Steps>

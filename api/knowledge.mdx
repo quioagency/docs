@@ -1,5 +1,5 @@
 ---
-title: "Knowledge API: Manage Documents Programmatically"
+title: "Knowledge API: List, Upload, and Delete All Documents"
 sidebarTitle: "Knowledge"
 description: "Use the Knowledge API to list all indexed documents, upload new content directly to your knowledge base, and delete documents you no longer need."
 ---
@@ -8,9 +8,7 @@ The Knowledge API gives you full programmatic control over the documents in your
 
 ## List documents
 
-<br />
-
-### GET /knowledge
+### GET /api/v1/knowledge
 
 Retrieve a paginated list of every document currently indexed in your workspace. Use the optional query parameters to page through large collections or filter results to a single source.
 
@@ -116,9 +114,7 @@ curl https://api.companybrain.ai/v1/knowledge \
 
 ## Upload a document
 
-<br />
-
-### POST /knowledge
+### POST /api/v1/knowledge
 
 Push a document directly into your knowledge base without connecting an external source. This is useful for one-off content, programmatically generated summaries, or migrating content from systems that Company Brain does not yet integrate with.
 
@@ -202,9 +198,7 @@ curl -X POST https://api.companybrain.ai/v1/knowledge \
 
 ## Delete a document
 
-<br />
-
-### DELETE /knowledge/{id}
+### DELETE /api/v1/knowledge/{id}
 
 Permanently remove a single document from your knowledge base. Once deleted, the document no longer appears in search results or AI-generated answers.
 

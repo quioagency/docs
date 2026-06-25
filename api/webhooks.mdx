@@ -121,9 +121,7 @@ Company Brain signs every webhook request with HMAC-SHA256 using the secret gene
 
 ## Create a webhook
 
-<br />
-
-### POST /webhooks
+### POST /api/v1/webhooks
 
 Register a new webhook endpoint and select which events should trigger deliveries to it. Company Brain immediately begins sending matching events to your URL.
 
@@ -174,9 +172,7 @@ curl -X POST https://api.companybrain.ai/v1/webhooks \
 
 ## List webhooks
 
-<br />
-
-### GET /webhooks
+### GET /api/v1/webhooks
 
 Retrieve all webhook endpoints registered for your workspace.
 
@@ -213,9 +209,7 @@ curl https://api.companybrain.ai/v1/webhooks \
 
 ## Delete a webhook
 
-<br />
-
-### DELETE /webhooks/{id}
+### DELETE /api/v1/webhooks/{id}
 
 Remove a webhook endpoint. Company Brain immediately stops sending events to the associated URL.
 
