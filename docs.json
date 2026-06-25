@@ -32,53 +32,27 @@
         "groups": [
           {
             "group": "Get Started",
-            "pages": [
-              "introduction",
-              "quickstart",
-              "concepts"
-            ]
+            "pages": []
           },
           {
             "group": "Knowledge Base",
-            "pages": [
-              "knowledge/ingestion",
-              "knowledge/sources",
-              "knowledge/sync",
-              "knowledge/search"
-            ]
+            "pages": []
           },
           {
             "group": "AI Assistant",
-            "pages": [
-              "assistant/overview",
-              "assistant/asking-questions",
-              "assistant/escalation"
-            ]
+            "pages": []
           },
           {
             "group": "Integrations",
-            "pages": [
-              "integrations/overview",
-              "integrations/slack",
-              "integrations/notion",
-              "integrations/google-drive",
-              "integrations/confluence"
-            ]
+            "pages": []
           },
           {
             "group": "Administration",
-            "pages": [
-              "admin/workspace-settings",
-              "admin/access-control",
-              "admin/team-management"
-            ]
+            "pages": []
           },
           {
             "group": "Help",
-            "pages": [
-              "faq",
-              "troubleshooting"
-            ]
+            "pages": []
           }
         ]
       },
@@ -87,19 +61,11 @@
         "groups": [
           {
             "group": "Overview",
-            "pages": [
-              "api/overview",
-              "api/authentication"
-            ]
+            "pages": []
           },
           {
             "group": "Endpoints",
-            "pages": [
-              "api/knowledge",
-              "api/search",
-              "api/sources",
-              "api/webhooks"
-            ]
+            "pages": []
           }
         ]
       }
