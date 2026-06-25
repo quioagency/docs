@@ -1,0 +1,238 @@
+---
+action_items_processed: true
+content_hash: "9984b057f663"
+date: "2026-06-22"
+entities: ["Content Rules Staging", "Archive Manifest", "Posting Log", "Airtable", "Close CRM", "EasyBill", "DocuSign", "ClickUp", "Zernio", "Slack", "Telegram", "WhatsApp", "ManyChat", "LucidLink"]
+entity_extracted: true
+entity_extracted_date: "2026-06-22"
+processed: true
+processed_date: "2026-06-22"
+source: "manual"
+tags: ["airtable", "data-governance", "clients-table", "schema-review", "decision-required"]
+type: "reference"
+title: "9.5-CLIENTS-DOSSIER"
+---
+
+# Daten-Wörterbuch — Tabelle **Clients** (`tblXGErjpjTLdMcYD`)
+
+**Stand:** 2026-06-22 · **Datensätze:** 65 Kunden · **Felder:** 189 (≈154 aktiv, 35 bereits zur Löschung markiert) **Zweck der Tabelle:** Die zentrale Kunden-Stammtabelle — Single Source of Truth pro Kunde. Hängt an fast allen Automationen (Onboarding, Posting, Content-Regeln, Reports, Sales-Sync, Wissenssystem). Jede Zeile = ein Kunde.
+
+> Lies zuerst die **Entscheidungs-Sektion** — das ist, wo ich dich brauche. Die Detail-Tabellen darunter sind Nachschlagewerk (alle 189 Felder, gruppiert). Legende Status: 🟢 aktiv behalten · 🟡 prüfen (leer / kein Code) · 🔀 Dublette/Synonym · ❓ Zweck unklar (für dich) · 🔴 schon zur Löschung markiert.
+
+---
+
+## ⚡ Entscheidungen für dich (die Knackpunkte)
+
+### 1. 35 Felder sind bereits zur Löschung markiert (`_DELETE_`) — endgültig weg in Phase 11. Bitte bestätigen.
+
+Diese kannst du in einem Rutsch durchwinken — sie sind aus Phase 08/09 markiert, haben (bis auf Datenreste) keinen aktiven Code mehr:
+
+- **Health-System (11):** health\_score, health\_status, health\_details, health\_trend, health\_action\_plan, health\_updated\_at, performance, satisfaction, ai\_satisfaction\_score, ai\_satisfaction\_reasoning, \+ ai\_satisfaction\_status (`_DEPRECATED_`)
+- **Vista-Social-Posting (9):** vista\_social\_profile\_ids, vs\_instagram/facebook/tiktok/youtube/linkedin/pinterest\_profile\_id, vs\_instagram/facebook\_publish\_as
+- **Follower-Zahlen (8):** ig/tiktok/yt/fb/linkedin/threads/x\_followers, followers\_updated\_at
+- **Alte Social-URLs (3):** instagram\_url, youtube\_url, linkedin\_url _(ersetzt durch ig\_username, yt\_channel\_url, linkedin\_company\_url)_
+- **Rest (4\+):** content\_type, churn\_reason, billing\_address, target\_audience\_problems/desires/fears, manychat\_active, collab\_mentions, rules\_locked, content\_rules\_updated\_at, ai\_writing\_updated\_at, active\_platforms, special\_terms, client\_orderindex, content\_rules\_archive, fallback\_task\_created, \_upload\_staging, brand\_fonts\_upload, revision\_log\_entries, cks\_migration\_status, smoke\_refac01 _(Test-Müll)_
+- **❓ Eine Rückfrage hier:** `special_terms` war mal als „aktiv genutzt" (FROXIMUN-Referral) eingestuft — jetzt markiert. Wirklich weg, oder doch behalten?
+
+### 2. Paket wird in **4 Feldern gleichzeitig** geführt — das ist zu viel.
+
+`package` (92%), `package_slug` (3%), `deal_package` (2%), `package_link` (3%). Du pflegst `package_slug` seit Phase 09 manuell, der Code liest aber teils noch `package`/`deal_package`. **Frage:** Welches ist künftig das Eine? (Vorschlag: `package_slug` als Wahrheit, Rest aufräumen.)
+
+### 3. Brand-Assets werden hochgeladen, aber von keiner Automation gelesen.
+
+`brand_logo`, `brand_guide`, `profile_picture` (alle 0%), `brand_colors`, `brand_fonts` (0%), `download_links` (0%) — werden von der nativen Upload-Automatik **geschrieben**, aber **kein Code liest sie**. **Frage:** Sollen die ins Interface (Team schaut Logo/Guide an) — oder sind sie totes Gewicht? Das ist genau eine Interface-Entscheidung.
+
+### 4. Doppelung Start-Datum: `start_date` (91%) vs. `contract_start` (91%).
+
+Zwei fast identisch gefüllte Datumsfelder. `contract_start` wird vom Code genutzt, `start_date` nur an einer Stelle. **Frage:** Zusammenlegen?
+
+### 5. ~22 leere Felder (0% befüllt), nicht markiert — wozu existieren sie?
+
+Zwei Untergruppen:
+
+- **Erwartbar leer (Daten kommen erst bei neuen Deals):** close\_deal\_id, docusign\_envelope\_id, contract\_signed, welcome\_mail\_sent\_at, clientid, cks\_dirty → **behalten** (aktiv in Sales/Onboarding-Code).
+- **Echte Kandidaten zum Wegräumen:** backoffice\_email, invoice\_email, slack\_email, additional\_contacts, additional\_emails, billing\_state, threads\_username, x\_username, onboarding\_guide\_task\_id → 0% \+ kaum/kein Code. **Behalten oder weg?**
+
+### 6. 10 Zeit-Schätzungs-Felder (`te_*`) — Backend oder Interface?
+
+te\_strategy\__, te\_production\__, te\_qc, te\_scheduling, te\_revision (je 38%) — speisen die Subtask-Zeitschätzungen. Aktiv, aber: gehören die ins Team-Interface oder bleiben sie reines Backend?
+
+---
+
+## Detail — alle Felder nach Gruppen
+
+### Gruppe 1 — Identität & Team (wer ist der Kunde, wer arbeitet dran)
+
+| Feld | Was es ist | Typ · Füll% | Genutzt von | Status |
+| --- | --- | --- | --- | --- |
+| client\_name | Kunden-/Markenname (Primärfeld) | multilineText · 100% | praktisch alle Automationen | 🟢 |
+| status | Onboarding / Active / Pending / Churned | singleSelect · 98% | sehr viele (Posting, Reports, Sync, Onboarding) | 🟢 |
+| company\_name | Firmenname (für Rechnung) | singleLineText · 3% | \[\[EasyBill\]\], Close-Sync, Vertrag | 🟢 (selten, aber rechnungsrelevant) |
+| tax\_id | Steuer-/USt-ID | singleLineText · 3% | EasyBill, Vertrag | 🟢 |
+| contact\_name | Ansprechpartner | singleLineText · 3% | Close-Sync, Reminder, Fellow-Matching | 🟢 |
+| contact\_email | E-Mail Ansprechpartner | email · 3% | EasyBill, Close, Fellow, Reminder | 🟢 |
+| contact\_phone | Telefon | phoneNumber · 80% | Formular-Merge | 🟢 |
+| communication\_channel | \[\[whatsapp\]\]/\[\[telegram\]\]/\[\[slack\]\]/e-mail | singleSelect · 97% | Formular-Merge (R/W) | 🟢 |
+| client\_emoji | Emoji für Slack/\[\[ClickUp\]\]-Titel | singleLineText · 91% | Onboarding, Task-Erstellung | 🟢 |
+| content\_strategist | verknüpfter Stratege (Team Members) | link · 98% | nur Schema-Def — Code nutzt Rollup `cs_clickup_id` | 🟢 (Anzeige \+ Rollup-Quelle) |
+| performance\_editor | verknüpfter Editor | link · 98% | über Rollup `pe_clickup_id` | 🟢 |
+| head\_of\_delivery | verknüpfter HoD | link · 97% | über Rollup `hod_clickup_id` | 🟢 |
+| assistenz | verknüpfte Assistenz | link · 97% | über Rollup `assistenz_clickup_id` | 🟢 |
+| cs\_clickup\_id | ClickUp-ID des Strategen (Rollup) | rollup · 98% | Task-Erstellung | 🟢 |
+| pe\_clickup\_id | ClickUp-ID des Editors (Rollup) | rollup · 98% | Task-Erstellung | 🟢 |
+| hod\_clickup\_id | ClickUp-ID HoD (Rollup) | rollup · 97% | Task-Erstellung, Welcome | 🟢 |
+| assistenz\_clickup\_id | ClickUp-ID Assistenz (Rollup) | rollup · 97% | Task-Erstellung, Provisioning | 🟢 |
+
+### Gruppe 2 — Vertrag, Pakete & Geld
+
+| Feld | Was es ist | Typ · Füll% | Genutzt von | Status |
+| --- | --- | --- | --- | --- |
+| package | Paket (Premium/Custom/Basic) | singleSelect · 92% | kein Prod-Code (nur Migrations-Skript) | 🔀 4-fach-Dublette → Entscheidung #2 |
+| package\_slug | Paket als Slug (Wahrheit ab Ph.09) | singleLineText · 3% | Close-Sync, Prestub | 🔀 → Entscheidung #2 |
+| deal\_package | Paket-Variante aus Close | singleSelect · 2% | Close-Sync, Vertrag | 🔀 → Entscheidung #2 |
+| package\_link | Paket als verknüpfter Record | link · 3% | Prestub, Vertrag, Deal-Volumen | 🔀 → Entscheidung #2 |
+| monthly\_retainer | monatl. Honorar | currency · 95% | Close-Sync, Vertrag, Deal-Volumen | 🟢 |
+| deal\_volume | Gesamt-Auftragsvolumen | currency · 83% | kein Prod-Code | 🟡 prüfen |
+| deal\_volume\_remaining | Rest-Volumen | currency · 32% | (Formel/Anzeige) | 🟢 |
+| upfront\_cash | Vorab-Zahlung (berechnet) | formula · 95% | — | 🟢 |
+| start\_date | Startdatum (alt) | date · 91% | nur Formular-Handler | 🔀 → Entscheidung #4 |
+| contract\_start | Vertragsbeginn | date · 91% | Close-Sync, Vertrag, Pre-Meeting | 🟢 → Entscheidung #4 |
+| contract\_end\_date | Vertragsende | date · 85% | Churn, Deal-Volumen, (Health) | 🟢 |
+| contract\_duration | Laufzeit (Monate) | number · 3% | Close-Sync, Vertrag | 🟢 |
+| days\_until\_contract\_end | Tage bis Vertragsende (Formel) | formula · 100% | (Health, geteilt) | 🟢 |
+| payment\_cycle | Monatlich / 3M / 6M Prepaid | singleSelect · 35% | Close-Sync, Vertrag | 🟢 |
+| monthly\_cancellation\_allowed | mtl. kündbar? | checkbox · 3% | — | 🟡 prüfen |
+| churn\_date | Kündigungsdatum | date · 49% | Pre-Meeting | 🟢 |
+| churn\_opportunity | Wiedergewinn-Chance | date · 34% | — | 🟡 prüfen |
+| custom\_deliverables | individuelle Leistungen | multilineText · 0% | Close-Sync, Vertrag, Deliverables | 🟢 (leer, aber aktiv) |
+| zusatzvereinbarungen | Zusatzvereinbarungen | multilineText · 0% | Close-Sync, Vertrag, Deliverables | 🟢 (leer, aber aktiv) |
+| contract\_links | Vertrags-Links | multilineText · 0% | kein Prod-Code | 🟡 prüfen |
+| contract\_signed | Vertrag unterschrieben? | checkbox · 0% | Vertrag/Zahlung (W) | 🟢 (füllt sich bei neuen Deals) |
+| docusign\_envelope\_id | \[\[DocuSign\]\]-Umschlag-ID | singleLineText · 0% | Vertrag/Zahlung (R/W) | 🟢 (füllt sich bei neuen Deals) |
+| close\_deal\_id | \[\[Close CRM\]\] Deal-ID | singleLineText · 0% | Close-Sync | 🟢 (neue Deals) |
+| close\_lead\_id | Close Lead-ID | singleLineText · 3% | Close-Sync (W) | 🟢 |
+| close\_opportunity\_id | Close Opportunity-ID | singleLineText · 3% | Close-Sync | 🟢 |
+| lead\_source | Woher kam der Lead | singleSelect · 3% | Close-Sync | 🟢 |
+| referred\_by | Empfohlen von | singleLineText · 2% | Close-Sync, Vertrag | 🟢 |
+| easybill\_invoice\_id | EasyBill Rechnungs-ID | number · 3% | Vertrag/Zahlung (W) | 🟢 |
+| billing\_street/city/zip/country | Rechnungsadresse | singleLineText · 3% | EasyBill, Vertrag | 🟢 |
+| billing\_state | Bundesland (Rechnung) | singleLineText · 0% | nur Formular-Merge | 🟡 prüfen (immer leer) |
+| backoffice\_email | Backoffice-Mail | email · 0% | nur Formular-Merge | 🟡 prüfen |
+| invoice\_email | Rechnungs-Mail | email · 0% | EasyBill, Formular | 🟡 prüfen (leer) |
+| additional\_contacts / additional\_emails | weitere Kontakte | multilineText · 0% | Formular, Onboarding-Provisioning | 🟡 prüfen |
+
+### Gruppe 3 — Content-Konfiguration (Mengen, Regeln, Zeitschätzungen)
+
+| Feld | Was es ist | Typ · Füll% | Genutzt von | Status |
+| --- | --- | --- | --- | --- |
+| shortform\_per\_week | Shorts/Woche | number · 43% | Deliverables, Wochenplanung | 🟢 (Kern-Config) |
+| longform\_per\_week | Longform/Woche | number · 43% | Deliverables, Wochenplanung | 🟢 |
+| image\_per\_week | Bilder/Woche | number · 43% | Deliverables, Wochenplanung | 🟢 |
+| text\_per\_week | Text-Posts/Woche | number · 43% | Deliverables, Wochenplanung | 🟢 |
+| content\_formats | erlaubte Formate (22 Optionen) | multipleSelects · 32% | Formular, Deliverables | 🟢 |
+| content\_rules | Content-Regeln (Freitext, alt) | richText · 78% | AI-Writing, Pre-Meeting, Wissenssystem | 🟢 (wird durch cks\_\* abgelöst) |
+| success\_definition | Was ist Erfolg für den Kunden | multilineText · 62% | Formular, Pre-Meeting | 🟢 |
+| meeting\_preference | Regular / Async / None | singleSelect · 34% | Formular-Merge | 🟢 |
+| notes | freie Notizen | multilineText · 95% | Pre-Meeting | 🟢 |
+| te\_strategy\_longform/shortform/image/text | Zeit-Schätzung Strategie | number · 38% | Subtask-Templates | 🟢 → Entscheidung #6 |
+| te\_production\_longform/shortform/image | Zeit-Schätzung Produktion | number · 38% | Subtask-Templates | 🟢 → Entscheidung #6 |
+| te\_qc / te\_scheduling / te\_revision | Zeit-Schätzung QC/Planung/Revision | number · 38% | Subtask-Templates | 🟢 → Entscheidung #6 |
+
+### Gruppe 4 — Posting-Konfiguration
+
+| Feld | Was es ist | Typ · Füll% | Genutzt von | Status |
+| --- | --- | --- | --- | --- |
+| posting\_platforms | wo gepostet wird (7 Optionen) | multipleSelects · 40% | AI-Writing, Posting | 🟢 |
+| posting\_tool | vista\_social / \[\[zernio\]\] | singleSelect · 98% | Posting, Verifikation, KPI-Sync | 🟢 |
+| zernio\_account\_ids | Zernio-Account-IDs | multilineText · 34% | Posting, KPI-Sync | 🟢 |
+| zernio\_profile\_id | Zernio-Profil-ID | singleLineText · 3% | Vertrag, Onboarding | 🟢 |
+| \_DELETE\_active\_platforms | aktive Plattformen (Dublette zu posting\_platforms) | multipleSelects · 3% | — | 🔴 |
+| _DELETE\_vista\_social\_profile\_ids \+ vsprofile\_id (6) \+ vs_\_publish\_as (2) | Vista-Social-Posting-Altlast | div. · 0–37% | — | 🔴 (9 Felder, Vista retired) |
+
+### Gruppe 5 — Wissenssystem (CKS) & Brand
+
+| Feld | Was es ist | Typ · Füll% | Genutzt von | Status |
+| --- | --- | --- | --- | --- |
+| cks\_brand\_voice | Wissens-Feld: Markenstimme | richText · 31% | AI-Writing, Pre-Meeting, Onboarding | 🟢 |
+| cks\_client\_profile | Wissens-Feld: Kundenprofil | richText · 3% | dito | 🟢 |
+| cks\_content\_rules | Wissens-Feld: harte Regeln | richText · 35% | dito | 🟢 |
+| cks\_strategy | Wissens-Feld: Strategie | richText · 35% | dito | 🟢 |
+| cks\_collaboration | Wissens-Feld: Zusammenarbeit | richText · 29% | dito | 🟢 |
+| cks\_learnings\_summary | Wissens-Feld: Learnings | richText · 25% | dito | 🟢 |
+| cks\_visual\_identity | Wissens-Feld: visuelle Identität | richText · 26% | dito | 🟢 |
+| cks\_dirty | Wissen veraltet? (Trigger) | checkbox · 0% | Regen-Webhook, Onboarding | 🟢 |
+| cks\_last\_regen\_at | letzte Wissens-Aktualisierung | dateTime · 37% | Regen | 🟢 |
+| cks\_regen\_status | running/success/failed | singleSelect · 37% | Regen | 🟢 |
+| brand\_voice | Markenstimme (alt, vor CKS) | multilineText · 54% | AI-Writing, Pre-Meeting, Onboarding | 🟢 (Überlappung mit cks\_brand\_voice — später prüfen) |
+| brand\_colors / brand\_fonts | Markenfarben / Schriften | singleLineText · 0% | nativ geschrieben, **kein Lese-Code** | 🟡 → Entscheidung #3 |
+| brand\_logo / brand\_guide / profile\_picture | Logo / Guide / Profilbild (Datei) | attachment · 0% | nativ geschrieben, **kein Lese-Code** | 🟡 → Entscheidung #3 |
+| Client Learnings | verknüpfte Learnings-Records | link · 32% | (lebende KB) | 🟢 |
+| customer\_interactions | verknüpfte Kontakt-Historie | link · 85% | (Verlauf, fürs Interface) | 🟢 |
+| \[\[Content Rules Staging\]\] / Content Rules Dedup | Pipeline für neue Regeln | link · 32–38% | Regel-Approval-Flow | 🟢 |
+
+### Gruppe 6 — Social-Präsenz (Handles & Links)
+
+| Feld | Was es ist | Typ · Füll% | Genutzt von | Status |
+| --- | --- | --- | --- | --- |
+| ig\_username / tiktok\_username | Handles IG / TikTok | singleLineText · 29–31% | Pre-Meeting | 🟢 |
+| fb\_page\_url / yt\_channel\_url / linkedin\_company\_url | Profil-URLs | singleLineText · 11–37% | Pre-Meeting | 🟢 |
+| threads\_username / x\_username | Handles Threads / X | singleLineText · 0% | Pre-Meeting | 🟡 prüfen (leer) |
+| tiktok\_url | TikTok-URL | url · 2% | Pre-Meeting, Trend-Research | 🟢 |
+| drive\_folder\_url | Google-Drive-Ordner | url · 69% | kein Prod-Code | 🟡 prüfen (hoch gefüllt, aber kein Code?) |
+| \_DELETE\_instagram\_url / youtube\_url / linkedin\_url | alte URL-Felder (ersetzt) | url · 3% | — | 🔴 |
+| _DELETE_ ig/tiktok/yt/fb/linkedin/threads/x\_followers \+ followers\_updated\_at | Follower-Zahlen (Sync abgeschaltet Ph.09) | number · 0–32% | — | 🔴 (8 Felder) |
+| \_DELETE\_manychat\_active | \[\[ManyChat\]\] aktiv? | checkbox · 0% | — | 🔴 |
+
+### Gruppe 7 — Performance & Health (Links \+ stillgelegt)
+
+| Feld | Was es ist | Typ · Füll% | Genutzt von | Status |
+| --- | --- | --- | --- | --- |
+| Content Performance | verknüpfte KPI-Records | link · 32% | KPI-Sync, Reports, Daten-Qualität | 🟢 (wird Phase-12-Interface-Quelle) |
+| \[\[Posting Log\]\] | verknüpfte Posting-Historie | link · 32% | kein direkter Feld-Read | 🟢 |
+| last\_contacted | letzter Kontakt (4 Kanäle) | date · 91% | Kontakt-Tracking, (Health) | 🟢 (Kandidat für „Wie läuft's"-Signal im Interface) |
+| _DELETE_ health\_score/status/details/trend/action\_plan/updated\_at | Health-Score-System (stillgelegt Ph.09) | div. · 0–45% | — | 🔴 (6) |
+| _DELETE_ performance / satisfaction | alte manuelle Bewertung | singleSelect · 83–86% | — | 🔴 (2) |
+| _DELETE_ ai\_satisfaction\_score/reasoning \+ \_DEPRECATED\_ai\_satisfaction\_status | KI-Zufriedenheits-Schätzung | div. · 22–34% | — | 🔴 (3) |
+
+### Gruppe 8 — Onboarding & Provisioning
+
+| Feld | Was es ist | Typ · Füll% | Genutzt von | Status |
+| --- | --- | --- | --- | --- |
+| onboarding\_status | pending/in\_progress/done/failed | singleSelect · 95% | Onboarding-Kette | 🟢 |
+| onboarding\_checkpoints\_last\_modified | letzte Checkpoint-Änderung | lastModifiedTime · 98% | Follow-up | 🟢 |
+| onboarding\_guide\_task\_id | ClickUp-Task des Guides | singleLineText · 0% | Deep-Research, Pre-Meeting (R/W) | 🟡 prüfen (leer) |
+| prov\_clickup / prov\_vs / prov\_welcome | Provisioning-Status je Schritt | singleSelect · 0–2% | Onboarding-Provisioning, Welcome | 🟢 |
+| provisioning\_failed\_at | wann Provisioning scheiterte | dateTime · 0% | Follow-up, Provisioning | 🟢 |
+| welcome\_task\_clickup\_id | ClickUp-Task Willkommen | singleLineText · 0% | Welcome, Follow-up | 🟢 |
+| welcome\_mail\_sent\_at | wann Willkommens-Mail raus | dateTime · 0% | Welcome | 🟢 (neue Kunden) |
+| follow\_up\_failed\_alerts / inactivity\_alerts / last\_alert\_at | Follow-up-Zähler | number/date · 0–2% | Onboarding-Follow-up | 🟢 |
+| pre\_stub\_created\_at | wann Pre-Stub angelegt | date · 2% | App (W), Reminder | 🟢 |
+| customer\_form\_url | Link zum Kundenformular | url · 0% | Prestub, Reminder | 🟢 |
+| customer\_submitted\_at | wann Formular abgeschickt | date · 0% | Formular-Handler (R/W) | 🟢 |
+| last\_reminder\_sent\_at / reminder\_count | Reminder-Tracking | date/number · 2% | Reminder | 🟢 |
+| slack\_email / clickup\_email | Einladungs-Mails | email · 0% | Provisioning, Formular | 🟢 |
+| slack\_channel\_type | Connect / Gast / shared | singleSelect · 0% | Provisioning | 🟢 |
+| download\_links | Asset-Download-Links | multilineText · 0% | nativ geschrieben, **kein Lese-Code** | 🟡 → Entscheidung #3 |
+| _DELETE_ \_upload\_staging / brand\_fonts\_upload / fallback\_task\_created | Onboarding-Altlasten | div. · 0% | — | 🔴 (3) |
+
+### Gruppe 9 — Technische IDs & Verdrahtung
+
+| Feld | Was es ist | Typ · Füll% | Genutzt von | Status |
+| --- | --- | --- | --- | --- |
+| clickup\_folder\_id | ClickUp-Kundenordner | singleLineText · 98% | sehr viele (Tasks, Onboarding, Reports) | 🟢 |
+| clickup\_task\_id | Haupt-ClickUp-Task | singleLineText · 92% | Posting, Daten-Qualität, Reports | 🟢 |
+| slack\_channel\_id | Slack-Channel | singleLineText · 34% | Kontakt-Tracking, Provisioning | 🟢 |
+| telegram\_chat\_id | Telegram-Gruppe | singleLineText · 34% | Kontakt-Tracking | 🟢 |
+| whatsapp\_phone | WhatsApp-Nummer | singleLineText · 34% | Formular-Merge | 🟢 |
+| clientid | technische Kunden-ID | singleLineText · 0% | App, Brand-Upload (Match-Key) | 🟢 |
+| \[\[Archive Manifest\]\] | verknüpfte Archiv-Records (neu) | link · 0% | (\[\[LucidLink\]\]-Projekt) | 🟢 neu |
+| _DELETE_ client\_orderindex / revision\_log\_entries / smoke\_refac01 | Sortier-Index / alte Revisions-Links / Test-Müll | div. · 2–26% | — | 🔴 (3) |
+
+---
+
+## Methodik (Tech-Fußnote)
+
+- **Live-Daten** (Typ, Optionen, Füllgrad, `_DELETE_`-Status): Meta-API \+ alle 65 Records, 2026-06-22. Roh: `_raw-clients-live-inventory.md`.
+- **Code-/Automations-Bezug:** frischer Grep über das gesamte `agents/` (Feld-Name **und** Field-ID-Konstante, ADR-478), Quote-Filter gegen Namens-Kollisionen (z.B. `status` als lokale Variable), Tests/Skripte separat gezählt; native \[\[Airtable\]\]-Automationen aus `native-automation-inventur.md`. Roh: `_raw-clients-code-map.md`. **Nicht** aus der stale cross-workstream-field-map.
+- „Genutzt von" ist verdichtet — die vollständige Modul-Liste pro Feld steht in der Roh-Datei.
+- Befüllung über 65 Kunden; bei Feldern, die sich erst bei neuen Deals/Onboardings füllen, ist 0% normal (im Status vermerkt).
