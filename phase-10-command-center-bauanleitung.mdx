@@ -834,10 +834,10 @@ Zusätzlich freigabepflichtig: die **exakte Personen-→-Rolle-Liste** (wer Edit
 - **Route:** `GET /webhooks/cks-regen/{client_id}` (registriert, fail-closed bei leerem Secret, HMAC-constant-time).
 - **`{client_id}`** ist nur der Name des Pfad-Parameters — der Server löst ihn als **Airtable-Record-ID** des Kunden auf. Darum ist **`RECORD_ID()`** in der Button-Formel **korrekt**.
 - **Secret:** `CKS_REGEN_WEBHOOK_SECRET` ist in Railway (`cron-scheduler` / `production`, 64-hex) **bereits gesetzt**. Den **existierenden** Wert einsetzen, **keinen neuen** generieren.
-- **Voller URL-String:**
-  ```
-  "https://quio-automations.up.railway.app/webhooks/cks-regen/" & RECORD_ID() & "?secret=DEIN_SECRET"
-  ```
+
+**Voller URL-String** (in die „Open URL"-Formel des Buttons):
+
+`"https://quio-automations.up.railway.app/webhooks/cks-regen/" & RECORD_ID() & "?secret=DEIN_SECRET"`
 
   </Accordion>
 
