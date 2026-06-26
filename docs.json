@@ -35,6 +35,12 @@
             "pages": []
           },
           {
+            "group": "Anleitungen",
+            "pages": [
+              "phase-10-command-center-bauanleitung"
+            ]
+          },
+          {
             "group": "Knowledge Base",
             "pages": [
               "test-page",

@@ -1,0 +1,862 @@
+---
+title: "Command-Center — Bau-Anleitung (Phase 10)"
+description: "Dein Klick-für-Klick-Drehbuch, um die zwei Airtable-Interfaces fürs ganze Team selbst zu bauen."
+date: "2026-06-26"
+tags: ["airtable", "interface", "command-center", "anleitung"]
+type: "guide"
+---
+
+# 🏗️ Command-Center bauen — dein Klick-Drehbuch
+
+Hi Jervin 👋 — das hier ist deine **Schritt-für-Schritt-Anleitung**, um endlich das **ganze Team nach Airtable** zu holen. Du baust zwei Sichten (Airtable nennt sie „Interfaces"), die das alte **Notion-Dokument-pro-Kunde** ersetzen: ein Kunde soll in **Minuten** erfassbar sein.
+
+> 💡 **Warum du hier alles selbst klickst:** Airtable-Interfaces haben **keine Schnittstelle**, über die ich sie für dich bauen könnte. Es ist reine Klick-Arbeit in der Oberfläche — darum ist das hier so kleinteilig. Du baust **nichts kaputt**: Felder werden nur ein-/ausgeblendet und schöner beschriftet, **keine Daten** werden verändert (bis zum allerletzten Schritt, dem Live-Schalten — der ist extra markiert).
+
+<CardGroup cols={2}>
+  <Card title="🟦 Command-Center Team" icon="users">
+    Die Sicht fürs **ganze Team** (Content Strategists, Performance Editoren, Assistenz, Freelancer, Cutter). Kundenprofil, Posting-Liste, Wissen, neue Regeln. **Kein Geld, kein Vertrag.**
+  </Card>
+  <Card title="🔒 Ops / Finance" icon="lock">
+    Die **private** Sicht nur für **dich, Pavlo und Nina**. Vertrag, Honorar, Konfiguration, Monitoring. **Hier liegt das Geld** — und nirgendwo sonst.
+  </Card>
+</CardGroup>
+
+<Note>
+**Warum zwei getrennte Sichten statt einer mit versteckten Geld-Feldern?** Weil Airtable Felder **nicht zuverlässig pro Person** ausblenden kann. Der einzige robuste Weg, damit ein Cutter nie sieht, was ein Kunde zahlt: das Geld lebt in einem **physisch getrennten** Interface. Das ist eine bewusste Datenschutz-Entscheidung, kein Workaround.
+</Note>
+
+---
+
+## So nutzt du diese Anleitung
+
+Jeder Bau-Schritt unten ist ein **Klick-Pfad** in der Airtable-Oberfläche. Bei jedem Feld steht:
+
+| Was du siehst | Was es bedeutet |
+| --- | --- |
+| **Technischer Name** (z. B. `client_name`) | So heißt das Feld im **Feld-Picker** — danach suchst du. |
+| **Display-Label** (z. B. „👤 Kunde") | So beschriftest du es **schön im Interface**. Der technische Name bleibt unverändert. |
+| **Editierbar** vs. **Nur lesen** | Ob das Team den Wert **ändern** darf oder nur **anschauen**. |
+
+<Warning>
+### ⛔ Die wichtigste Regel: Finger weg von `_DELETE_`-Feldern
+
+Im Feld-Picker tauchen **viele alte Felder mit dem Vorsatz `_DELETE_`** auf — bei der Kunden-Tabelle sind das **61 von 191**. Die sind zum Wegräumen markiert (nur noch nicht endgültig gelöscht).
+
+**Wähle NIEMALS ein Feld, dessen Name mit `_DELETE_` beginnt.** Achte besonders auf Doppelgänger: das echte `snapshots` ist richtig — `_DELETE_snapshot_24h` ist falsch. Das echte `brand_fonts` ist richtig — `_DELETE_brand_fonts_upload` ist falsch.
+
+Faustregel: **Steht `_DELETE_` davor → ignorieren.**
+</Warning>
+
+<Tip>
+Du musst das **nicht an einem Stück** schaffen. Das Bauen (Interface A und B) ist komplett **gefahrlos und umkehrbar** — mach Pausen, wo du willst. Nur der **allerletzte Abschnitt** („Live schalten") ist heikel und braucht meine ausdrückliche Freigabe-Abstimmung mit dir.
+</Tip>
+
+---
+
+## ✅ Bevor du loslegst
+
+<Check>
+**Bauen kannst du sofort** — du brauchst nur Zugang zur Base. Alle Bau-Schritte (Interface A + B) sind ungefährlich und jederzeit rückgängig.
+</Check>
+
+<Check>
+**Nur das LIVE-Schalten am Ende braucht den richtigen Airtable-Tarif:** mindestens **„Team"**. Du prüfst das erst ganz am Schluss (Workspace → Billing). Solange du nur baust, ist der Tarif egal.
+</Check>
+
+<Check>
+Die **Base**, in der alles passiert: [Kunden-Base in Airtable öffnen](https://airtable.com/apppyQoCv1tJS7Dzw). Alle Schritte spielen hier.
+</Check>
+
+---
+
+# 🟦 Interface A — „Command-Center Team" bauen
+
+Das ist die Sicht fürs ganze Team. Sie besteht aus mehreren Seiten: **Kundenprofil** (mit Reitern), **Posting-Liste**, **Add-Knowledge-Formular** und **Neue-Regel-Formular**. Wir bauen sie in dieser Reihenfolge.
+
+## 1️⃣ Das Interface anlegen
+
+<Steps>
+  <Step title="Interfaces öffnen">
+    [Base öffnen](https://airtable.com/apppyQoCv1tJS7Dzw) → in der linken Leiste auf **Interfaces** klicken → **Create interface** (oder „Start from scratch").
+  </Step>
+  <Step title="Namen vergeben">
+    Nenne das Interface exakt: **`Command-Center Team`**.
+
+    Beschreibung (optional): _„Team-Sicht: Kundenprofil, Posting-Liste, Neue Regel, Wissen. Keine Geld-/Vertragsdaten."_
+  </Step>
+  <Step title="Noch NICHT teilen">
+    Wichtig: **noch nichts veröffentlichen oder teilen.** Das passiert erst ganz am Ende beim Live-Schalten. Hier wird nur gebaut.
+  </Step>
+</Steps>
+
+## 2️⃣ Seite „Kundenprofil" anlegen
+
+Diese Seite ist das Herzstück: oben die Stammdaten auf einen Blick, dahinter Reiter für Details. Felder sind **nach Änderungshäufigkeit** sortiert — was oft gebraucht wird, steht prominent; was selten gebraucht wird, wandert in einen Reiter.
+
+<Steps>
+  <Step title="Neue Seite mit Record-Detail-Layout">
+    Im Interface `Command-Center Team` → **Add page** → Layout **Record review** (das Detail-Layout mit einem Record-Auswähler oben und den Details darunter).
+  </Step>
+  <Step title="Datenquelle ZUERST setzen: Clients">
+    Als Tabelle die **Kunden-Tabelle (Clients)** wählen.
+
+    <Warning>
+    Die Tabelle **immer zuerst** setzen. Wenn du sie später wechselst, **löscht Airtable deine ganze Feld-Konfiguration** auf der Seite. Also: Tabelle → dann Felder.
+    </Warning>
+  </Step>
+  <Step title="Record-Auswähler auf aktive Kunden filtern">
+    Filter setzen: **Status ist `Active` ODER `Onboarding`** — so erscheinen im Auswähler nur die aktiven Kunden, keine alten/gekündigten.
+  </Step>
+  <Step title="Seite benennen">
+    Seitenname: **`Kundenprofil`**.
+  </Step>
+</Steps>
+
+## 3️⃣ Reiter „Übersicht" — die Stammdaten auf einen Blick
+
+Lege als ersten Reiter **`Übersicht`** an und füge diese Felder **in dieser Reihenfolge** hinzu:
+
+| Technischer Name | Display-Label | Recht |
+| --- | --- | --- |
+| `client_name` | 👤 Kunde | Nur lesen |
+| `company_name` | 🏢 Firma | Nur lesen |
+| `status` | 📊 Status | **Editierbar** |
+| `client_emoji` | 😀 Emoji | **Editierbar** |
+| `package_slug` | 📦 Paket | Nur lesen |
+| `drive_folder_url` | 📁 Drive | **Editierbar** |
+| `communication_channel` | 💬 Kanal | **Editierbar** |
+
+**Danach eine kleine Gruppe „Mengen / Woche"** (alle **nur lesen** — geändert werden sie nur im privaten Ops-Interface):
+
+`shortform_per_week` · `longform_per_week` · `image_per_week` · `text_per_week`
+
+<Info>
+**Mini-Abstimmung beim Bauen:** Die 4 Mengen-Felder zeige ich standardmäßig **nur lesend** an (praktisch fürs Team zu sehen, ändern dürfen sie es nicht). Falls du die Mengen lieber komplett privat hältst → einfach weglassen. Kurz Bescheid sagen, dann lasse ich sie raus.
+</Info>
+
+### Team-Zuständige (der „wer macht was"-Block)
+
+Lege **innerhalb der Übersicht** eine Gruppe **`Team-Zuständige`** an mit vier verknüpften Feldern — **alle editierbar**, damit Pavlo die Zuständigkeit direkt umstellen kann (Personal-/Freelancer-Tausch):
+
+| Technischer Name | Display-Label | Recht |
+| --- | --- | --- |
+| `content_strategist` | 🎯 Content Strategist | **Editierbar** |
+| `performance_editor` | 🎬 Performance Editor | **Editierbar** |
+| `head_of_delivery` | 👑 Head of Delivery | **Editierbar** |
+| `assistenz` | 🤝 Assistenz | **Editierbar** |
+
+<Warning>
+Die dazugehörigen **ClickUp-ID-Felder** (`cs_clickup_id`, `pe_clickup_id`, `hod_clickup_id`, `assistenz_clickup_id`) **NICHT** hinzufügen. Das sind versteckte Technik-Felder, die dem Link **automatisch folgen** — sie gehören nicht ins sichtbare Profil.
+</Warning>
+
+<Check>
+**Wichtiger Test (Team-Switch funktioniert?):** Öffne einen **Test-Kunden** → stelle bei `performance_editor` eine **andere Person** ein → speichern → schau in der normalen Tabelle nach, ob `pe_clickup_id` **automatisch** den neuen Wert gezogen hat. Klappt das, funktioniert die ganze Kette (Switch + nachziehende ClickUp-Zuordnung). Danach den Test-Kunden **zurückstellen**.
+</Check>
+
+## 4️⃣ Reiter „Marke" — Brand-Assets zum Anschauen
+
+Neuen Reiter **`Marke`** anlegen. Alle Felder **nur lesen** (das Team schaut Logo/Guide/Farben an, ändert sie aber nicht):
+
+`brand_logo` · `brand_guide` · `profile_picture` · `brand_colors` · `brand_fonts` · `download_links`
+
+<Warning>
+Bei `brand_fonts` das **Textfeld** wählen (so heißt es live) — **nicht** das `_DELETE_brand_fonts_upload` (das ist das alte Datei-Feld und zum Löschen markiert).
+</Warning>
+
+## 5️⃣ Reiter „Zeit-Schätzungen" — die te-Felder
+
+Neuen Reiter **`Zeit-Schätzungen`** anlegen. **Alle 10 Felder editierbar** (Bearbeitungsrecht später für Performance-Editoren und dich):
+
+`te_strategy_longform` · `te_strategy_shortform` · `te_strategy_image` · `te_strategy_text` · `te_production_longform` · `te_production_shortform` · `te_production_image` · `te_qc` · `te_scheduling` · `te_revision`
+
+## 6️⃣ Reiter „Social" — ein einziges Feld
+
+Neuen Reiter **`Social`** anlegen mit **genau einem** Feld:
+
+| Technischer Name | Display-Label | Recht |
+| --- | --- | --- |
+| `social_profiles` | 📱 Social Profiles | **Editierbar** |
+
+<Warning>
+Die **8 alten Social-Felder** (`ig_username`, `tiktok_username`, `fb_page_url`, `yt_channel_url`, `linkedin_company_url`, `tiktok_url`, `threads_username`, `x_username`) **NICHT** hinzufügen — die sind durch das eine `social_profiles`-Feld ersetzt und tragen jetzt `_DELETE_`.
+</Warning>
+
+## 7️⃣ Reiter „Wissen" — was wir über den Kunden wissen
+
+Zurück zur Seite **Kundenprofil** → neuen Reiter **`Wissen`**.
+
+**Die 7 Wissens-Felder (das automatisch gepflegte Kunden-Gedächtnis), alle nur lesen:**
+
+`cks_brand_voice` · `cks_client_profile` · `cks_content_rules` · `cks_strategy` · `cks_collaboration` · `cks_learnings_summary` · `cks_visual_identity`
+
+**Darunter die editierbaren Wissens-Felder:**
+
+| Technischer Name | Display-Label | Recht |
+| --- | --- | --- |
+| `content_rules` | 📋 Content-Regeln | **Editierbar** |
+| `success_definition` | 🎯 Was ist Erfolg? | **Editierbar** |
+| `notes` | 📝 Notizen | **Editierbar** |
+
+**Plus die lebenden Wissens-Einträge als verknüpfte Liste (nur lesen):** das Link-Feld `Client Learnings` einbinden. (Neues Wissen kommt über das Formular weiter unten, nicht hier per Hand.)
+
+## 8️⃣ Reiter „Kontakt-Verlauf" — was zuletzt lief
+
+Neuen Reiter **`Kontakt-Verlauf`** anlegen mit der verknüpften Kontakt-Historie (**Customer Interactions**), gefiltert auf den aktuellen Kunden, **nur lesen**.
+
+<Note>
+**Wichtige Korrektur gegenüber älteren Plänen:** Die Felder dieser Tabelle heißen live anders als ursprünglich notiert. Nimm im Verlauf-Element diese:
+
+| Technischer Name | Display-Label |
+| --- | --- |
+| `interaction_title` | 🗒 Titel _(automatisch erzeugt, nur lesen)_ |
+| `interaction_type` | 🏷 Art |
+| `summary` | 📄 Zusammenfassung |
+| `interaction_date` | 📅 Datum |
+
+**Sortierung: nach `interaction_date` absteigend** (neueste zuerst) — das ist das fachliche Datum der Interaktion. Limit ca. 20 Einträge.
+</Note>
+
+Zusätzlich das Feld **`last_contacted`** als **nur lesen** dazu (wird automatisch aus vier Kanälen befüllt — Fellow, Slack, Telegram, Ad-hoc — nie von Hand).
+
+## 9️⃣ Seite „Posting-Liste" — gepostete Inhalte + Performance
+
+Eine eigene Seite, die pro Kunde die geposteten Inhalte mit ihrer **Performance** zeigt.
+
+<Steps>
+  <Step title="Neue Seite als Liste">
+    Im Interface `Command-Center Team` → **Add page** → Layout **List** (oder Grid). **Datenquelle ZUERST: Content Performance.**
+  </Step>
+  <Step title="Seite benennen">
+    Seitenname: **`Posting-Liste`**.
+  </Step>
+  <Step title="Pflicht-Filter setzen">
+    Filter: **`record_type` ist genau `Post`** — **Groß-/Kleinschreibung beachten**, exakt „Post". (Andere Typen wie „Weekly Account Metrics" gehören nicht in diese Liste.)
+
+    Zusätzlich pro Kunde filtern (über das `client`-Link-Feld) — am einfachsten als **Kunden-Auswahl/Filter** für den Nutzer.
+  </Step>
+</Steps>
+
+### Die Spalten der Posting-Liste (alle nur lesen)
+
+| Technischer Name | Display-Label |
+| --- | --- |
+| `date` | 📅 Datum |
+| `network` | 📱 Plattform |
+| `post_url` | 🔗 Post |
+| `virality_tier` | 🔥 Virality |
+| `verdict` | ⚖️ Urteil |
+| `views_outlier` | 📈 Outlier |
+| `views` | 👁 Views |
+| `likes` | ❤️ Likes |
+| `er_core` | 💬 Engagement |
+| `score` | 🎯 Score |
+| `verdict_note` | 📝 Notiz zum Urteil |
+
+**Sortierung:** primär nach `date` absteigend; als zweite anbietbare Sortierung `views_outlier` absteigend. **Filter-Achsen** `virality_tier` und `network` aktivieren.
+
+<Note>
+### Warum es hier KEINE klassische „Status"-Spalte gibt
+
+In älteren Plänen sollte ein Redaktions-Status (Entwurf / In Prüfung / Freigegeben) angezeigt werden. **Das passt hier bewusst nicht** — und zwar aus einem einfachen Grund:
+
+Bei einem **schon geposteten** Inhalt ist die spannende Frage nicht „ist er freigegeben?" (das war er ja längst), sondern **„wie ist er gelaufen?"**. Darum ist der echte Status hier die **Performance**: 🔥 `virality_tier`, ⚖️ `verdict` und vor allem 📈 `views_outlier` — das **Kern-Signal von QUIO** (schlägt der Post aus dem Rahmen seines Accounts?).
+
+Der redaktionelle Arbeits-Status (wer muss noch was abnehmen) lebt weiterhin **in ClickUp**, wo die Produktion stattfindet — nicht in dieser Performance-Liste.
+</Note>
+
+<Warning>
+**Leere Zellen sind normal — nicht ausblenden.** `score`, `verdict` und `verdict_note` sind bei frischen Posts oft noch leer (die Werte füllen sich später). Setze **keine** Regel, die leere Zeilen versteckt — sie sollen einfach leer („—") erscheinen. Sonst verschwinden die neuesten Posts.
+</Warning>
+
+<Check>
+**Gegentest:** Zwei verschiedene Kunden im Filter wählen → jeder zeigt nur seine eigenen Posts. Einen Kunden mit ganz frischen Posts wählen → leere `score`-Zellen erscheinen **ohne Fehler**.
+</Check>
+
+## 🔟 Seite „Add Knowledge" — neues Wissen schnell erfassen
+
+Ein kleines Formular, mit dem das Team neues Wissen zu einem Kunden hinzufügt. Es schreibt in die **Customer-Knowledge**-Tabelle.
+
+<Steps>
+  <Step title="Formular-Seite anlegen">
+    **Add page** → **Form** auf die Tabelle **Customer Knowledge**. Seitenname: **`Add Knowledge`**. (Falls aus einer früheren Phase schon eine „Add Knowledge"-Form existiert: erst live anschauen und wiederverwenden, statt doppelt zu bauen.)
+  </Step>
+  <Step title="Sichtbare Formular-Felder">
+    In dieser Reihenfolge: `client` (**Pflicht, sichtbar lassen!**) · `title` (Pflicht) · `content` (Pflicht) · `knowledge_type` (Pflicht) · `Critical` (Häkchen) · `scope` · `niche_tag` · `valid_until`.
+  </Step>
+  <Step title="Den Aufruf-Button auf der Kunden-Tabelle anlegen">
+    Damit das Formular den Kunden schon vorausgefüllt bekommt, legst du auf der **Clients-Tabelle** ein **Button-Feld** an → Aktion **Open URL** → mit dieser URL-Formel (die `<FORMULAR_ID>` ersetzt du durch die ID deiner gerade gebauten Form):
+
+    ```
+    "https://airtable.com/apppyQoCv1tJS7Dzw/<FORMULAR_ID>?prefill_client=" & RECORD_ID() & "&hide_client=true&prefill_status=Pending&hide_status=true&prefill_source_type=Manual&hide_source_type=true"
+    ```
+  </Step>
+</Steps>
+
+<Info>
+### Warum `client` sichtbar bleibt, aber trotzdem ausgeblendet wird
+
+Klingt widersprüchlich, ist aber Absicht: Das `client`-Feld **muss im Formular vorhanden (sichtbar) sein**, sonst übernimmt Airtable die Kunden-Zuordnung nicht. Der URL-Teil `&hide_client=true` **versteckt es dann optisch** vor dem Nutzer — der Kunde ist ja schon korrekt vorausgefüllt. Genauso werden `status=Pending` und `source_type=Manual` automatisch gesetzt und ausgeblendet.
+</Info>
+
+<Warning>
+### ⚠️ Test-Absenden nur mit Test-Identität — danach aufräumen
+
+Ein Test-Absenden schreibt einen **echten Eintrag** und kann einen **bezahlten KI-Lauf** auslösen. Darum:
+
+- **Nur mit Test-Kunde / Test-Identität** testen — Konvention: `quisada.jervin+...@gmail.com` (z. B. `quisada.jervin+test1@gmail.com`). **Nie echte Kundendaten.**
+- Den Test-Eintrag **einmal** absenden (nicht mehrfach).
+- Danach den **Test-Eintrag wieder löschen**, damit der Verarbeitungs-Lauf nicht mit Müll arbeitet.
+</Warning>
+
+<Check>
+Über den Button von einem Test-Kunden das Formular öffnen → ausfüllen → absenden → in Customer Knowledge prüfen: neuer Eintrag mit korrekt verknüpftem `client`, `status = Pending`, `source_type = Manual`. Danach Test-Eintrag löschen.
+</Check>
+
+## 1️⃣1️⃣ Seite „Neue Regel" — Content-Regel vorschlagen
+
+Ein Formular, mit dem das Team eine neue Content-Regel vorschlägt. Es schreibt in **`content_rules_staging`** und hängt automatisch am bestehenden Prüf-/Freigabe-Ablauf.
+
+<Steps>
+  <Step title="Formular-Seite anlegen">
+    **Add page** → **Form** auf die Tabelle **Content Rules Staging**. Seitenname: **`Neue Regel`**.
+  </Step>
+  <Step title="Sichtbare Formular-Felder">
+    Nur diese: `client` (**Pflicht, sichtbar lassen** + per `hide_client=true` ausblenden, genau wie oben) · `rule_text` (Pflicht) · `source_type` · `source_detail` · `source_quote`.
+  </Step>
+  <Step title="Diese Felder NICHT ins Formular">
+    `status`, `category_suggestion`, `fellow_meeting_link`, `meeting_date`, `recording_id`, `source_id`, `created_at` — die füllt die Automatik. Wenn du sie ins Formular nimmst, störst du den Ablauf.
+  </Step>
+</Steps>
+
+<Warning>
+### ⛔ `confidence` auf KEINEN Fall ins Formular
+
+Das Feld `confidence` ist live **kaputt** — es hat **22 vermüllte Optionen** (Mischmasch aus High/Hoch/sehr hoch/medium und sogar Template-Resten). Es gehört **nicht** ins Formular. Lass es einfach weg.
+</Warning>
+
+<Warning>
+### ⚠️ Test-Absenden nur mit Test-Identität — danach aufräumen
+
+Auch hier: Ein Test-Absenden schreibt einen **echten Eintrag** und stößt den **bezahlten Prüf-/Freigabe-Lauf** an. Also: **nur mit Test-Kunde / Test-Identität** (`quisada.jervin+...@gmail.com`), **einmal** absenden, danach den **Test-Eintrag löschen**.
+</Warning>
+
+<Check>
+Test-Regel für einen Test-Kunden absenden → prüfen, dass ein `content_rules_staging`-Eintrag entsteht und vom Freigabe-Ablauf aufgegriffen wird (Status bewegt sich Richtung „geprüft"; ggf. kurz auf den automatischen Lauf warten). Danach Test-Eintrag löschen.
+</Check>
+
+<Tip>
+🎉 **Interface A ist fertig gebaut!** Kundenprofil (mit allen Reitern), Posting-Liste, Add-Knowledge und Neue-Regel stehen. Noch ist nichts geteilt — das machst du im allerletzten Abschnitt. Jetzt erst das zweite Interface.
+</Tip>
+
+---
+
+# 🔒 Interface B — „Ops / Finance" bauen
+
+Das ist die **private** Sicht für dich, Pavlo und Nina. Hier liegen **Vertrag, Geld, Konfiguration und Monitoring** — getrennt vom Team-Interface, damit das Geld privat bleibt.
+
+## 1️⃣ Das Interface anlegen (ein eigenes, getrennt!)
+
+<Steps>
+  <Step title="Neues, eigenes Interface">
+    [Base öffnen](https://airtable.com/apppyQoCv1tJS7Dzw) → **Interfaces** → **Create interface** → Name: **`Ops / Finance`**.
+
+    <Warning>
+    Das ist ein **eigenes, zweites Interface** — **keine** Seite innerhalb von „Command-Center Team". Genau diese physische Trennung macht „Geld privat" sicher.
+    </Warning>
+  </Step>
+  <Step title="Beschreibung">
+    _„Enger Kreis (Jervin/Pavlo/Nina): Vertrag, Honorar, Config, Monitoring. NICHT mit dem Team teilen."_
+  </Step>
+</Steps>
+
+## 2️⃣ Seite „Vertrag & Zahlen"
+
+<Steps>
+  <Step title="Neue Seite als Record-Detail">
+    **Add page** → Layout **Record review** → **Datenquelle ZUERST: Clients**. Seitenname: **`Vertrag & Zahlen`**. Record-Auswähler: **alle Status** verfügbar (Vertragsdaten sind auch für gekündigte Kunden relevant).
+  </Step>
+  <Step title="Ganz oben prominent: der Vertrags-Spiegel (nur lesen)">
+    `contract_overview` → **„📄 Vertrag auf einen Blick"** → **Nur lesen**. Das ist ein automatischer Spiegel aller Vertragsfelder.
+  </Step>
+</Steps>
+
+### Strukturierte Vertragsfelder darunter
+
+**Editierbar (für dich / Nina):**
+
+| Technischer Name | Display-Label |
+| --- | --- |
+| `monthly_retainer` | 💶 Monatliches Honorar |
+| `payment_cycle` | 🔁 Zahlungsrhythmus |
+| `start_date` | 📅 Startdatum |
+| `contract_start` | 📅 Vertragsbeginn |
+| `contract_end_date` | 📅 Vertragsende |
+| `contract_duration` | ⏳ Laufzeit (Monate) |
+| `churn_date` | 🚪 Kündigungsdatum |
+| `monthly_cancellation_allowed` | ✅ Monatlich kündbar? |
+| `custom_deliverables` | 📦 Individuelle Leistungen |
+| `additional_agreements` | 📝 Zusatzvereinbarungen |
+| `company_name` | 🏢 Firma (Rechnung) |
+| `tax_id` | 🧾 Steuer-ID |
+| `billing_street` | 🏠 Rechnung: Straße |
+| `billing_city` | 🏙 Rechnung: Stadt |
+| `billing_zip` | 📮 Rechnung: PLZ |
+| `billing_country` | 🌍 Rechnung: Land |
+| `backoffice_email` | 📧 Backoffice-Mail |
+| `invoice_email` | 📧 Rechnungs-Mail |
+
+<Warning>
+**Wichtige Korrektur:** Das Feld für Zusatzvereinbarungen heißt live **`additional_agreements`** — **nicht** mehr `zusatzvereinbarungen` (wurde umbenannt). Such im Picker nach `additional_agreements`.
+</Warning>
+
+**Nur lesen (berechnet / automatisch befüllt):**
+
+`deal_volume_remaining` · `upfront_cash` · `days_until_contract_end` · `churn_opportunity` · `contract_signed` · `easybill_invoice_id`
+
+<Warning>
+**Diese Felder NICHT hinzufügen:** `deal_volume` und `package` sind bereits zum Löschen markiert (erscheinen mit `_DELETE_`-Vorsatz) → einfach nicht auswählen, sie sind damit schon erledigt. Auch `billing_state` weglassen.
+</Warning>
+
+## 3️⃣ Seite „Konfiguration" — die Automatik-Steuerung
+
+Hier stellst du alle Felder ein, die die Automationen steuern (Mengen, Posting, Pakete). Eine **Grid**-Seite eignet sich gut fürs schnelle Massen-Editieren.
+
+<Steps>
+  <Step title="Neue Seite als Grid">
+    **Add page** → Layout **Grid** → **Datenquelle: Clients**. Seitenname: **`Konfiguration`**. Filter: Status `Active` oder `Onboarding` (alle verfügbar). Sortierung: `client_name` aufsteigend.
+  </Step>
+</Steps>
+
+### Editierbare Spalten (für dich / Pavlo / Nina)
+
+| Bereich | Felder |
+| --- | --- |
+| **Mengen / Woche** | `shortform_per_week` · `longform_per_week` · `image_per_week` · `text_per_week` |
+| **Posting** | `posting_platforms` · `posting_tool` · `zernio_account_ids` · `zernio_profile_id` |
+| **Formate** | `content_formats` |
+| **Pakete** | `package_slug` · `package_link` · `deal_package` |
+| **Identifikator** | `client_name` (nur lesen) |
+
+<Warning>
+**Korrektur bei `posting_tool`:** Dieses Feld hat live **nur zwei** Optionen — **`vista_social`** und **`zernio`** (kleingeschrieben). Ein früher genanntes „slack" gibt es hier **nicht**.
+</Warning>
+
+### Nur-lesen-Spalten (zum Nachschauen / Springen)
+
+| Bereich | Felder |
+| --- | --- |
+| **Provisioning** | `prov_clickup` · `prov_vs` · `prov_welcome` · `onboarding_status` · `provisioning_failed_at` |
+| **Sales-Sprunglinks** | `close_deal_id` · `close_lead_id` · `docusign_envelope_id` · `lead_source` · `referred_by` · `contract_links` |
+
+<Warning>
+**Nicht hinzufügen:** `package` (totes Feld, `_DELETE_`), `close_opportunity_id` (weglassen), alle `vs_*`-Felder und `vista_social_profile_ids` (durch `zernio_*` ersetzt, `_DELETE_`), und natürlich **alle** `_DELETE_`-Felder.
+</Warning>
+
+<Check>
+**Config-Edit-Test (an mindestens 5 Feldern):** An **einem Test-Kunden** je einen Wert ändern und in der Tabelle bestätigen, dass er durchschlägt:
+
+- `shortform_per_week` (z. B. 3 → 4)
+- `posting_tool` (z. B. auf `zernio`)
+- `posting_platforms` (eine Plattform hinzufügen)
+- `monthly_retainer` (Testwert)
+- `content_formats` (eine Option an/aus)
+
+Danach **alle Testwerte zurücksetzen.**
+</Check>
+
+## 4️⃣ Seite „Monitoring" — Wissens-Gesundheit + Regen-Knopf
+
+Hier siehst du, wie aktuell das Kunden-Wissen ist, und kannst es bei Bedarf per Knopfdruck neu erzeugen lassen.
+
+<Steps>
+  <Step title="Neue Seite als Grid">
+    **Add page** → Layout **Grid** → **Datenquelle: Clients**. Seitenname: **`Monitoring`**. Filter: Status `Active` oder `Onboarding`. Sortierung: `cks_last_regen_at` absteigend.
+  </Step>
+  <Step title="Spalten (alle nur lesen)">
+    `client_name` · `kb_record_count` (Anzahl verknüpfter Wissens-Einträge) · `cks_last_regen_at` (letzte Aktualisierung) · `cks_regen_status` (Status, am besten farbcodiert) · `cks_dirty` (Häkchen „veraltet?").
+
+    Farben wie gewohnt: Status `failed` → rot, `running` → gelb, `success` → grün; wenige Einträge → rot; letzte Aktualisierung älter als 7 Tage → gelb.
+  </Step>
+</Steps>
+
+### Den „Regenerate jetzt"-Knopf bauen
+
+So einen Knopf gibt es noch nicht — du legst ihn selbst an.
+
+<Steps>
+  <Step title="Button-Feld anlegen">
+    Auf der **Clients-Tabelle** ein **Button-Feld** namens **`Regenerate jetzt`** anlegen → Aktion **Open URL**.
+  </Step>
+  <Step title="Diese URL-Formel eintragen">
+    ```
+    "https://quio-automations.up.railway.app/webhooks/cks-regen/" & RECORD_ID() & "?secret=DEIN_SECRET"
+    ```
+
+    `DEIN_SECRET` ersetzt du durch den **bereits existierenden** 64-stelligen Wert aus Railway → **Variables** → `CKS_REGEN_WEBHOOK_SECRET`.
+
+    <Warning>
+    **Keinen neuen Secret erzeugen!** Nimm den **vorhandenen** Wert aus Railway. Und `RECORD_ID()` bleibt genau so stehen — das ist korrekt (der Server erwartet hier die Airtable-Record-ID des Kunden).
+    </Warning>
+  </Step>
+  <Step title="Knopf auf die Monitoring-Seite holen">
+    Das Button-Feld `Regenerate jetzt` als Spalte/Element auf der Monitoring-Seite einbinden.
+  </Step>
+</Steps>
+
+<Check>
+**Regen-Test:** Bei einem **Test-Kunden** auf „Regenerate jetzt" klicken → es öffnet sich ein Browser-Tab mit „Regen gestartet" → nach 1–2 Minuten die Seite aktualisieren → `cks_regen_status` steht auf `success`. (Der Knopf regeneriert nur das Wissen dieses einen Kunden — gefahrlos und wiederholbar.)
+</Check>
+
+<Tip>
+🎉 **Interface B ist fertig gebaut!** Vertrag & Zahlen, Konfiguration und Monitoring stehen. Beide Interfaces sind jetzt gebaut — aber noch **nichts ist geteilt**. Das kommt jetzt: der letzte, heikle Schritt.
+</Tip>
+
+---
+
+# 🚦 Live schalten — der heikle Schritt
+
+<Warning>
+## ⚠️ STOPP — das hier ist der unumkehrbare Teil
+
+Alles bisher war gefahrlos. **Ab hier nicht.** Sobald du teilst, bekommt das Team Zugriff und sieht (im Team-Interface) live deine Felder, Editoren können live ändern — und das private Ops-Interface darf **niemals** versehentlich offen stehen.
+
+**Die Reihenfolge ist Absicht und nicht verhandelbar:**
+1. Zuerst Tarif prüfen.
+2. Dann das **private** Ops-Interface eng abriegeln (nur 3 Personen).
+3. Dann als **Test-Zuschauer** prüfen, dass Ops für andere **unsichtbar** ist.
+4. **Erst danach** das Team-Interface einladen.
+
+So kann kein Teammitglied je ein Zeitfenster erwischen, in dem das Geld-Interface fälschlich offen ist.
+
+**Bevor du hier startest, sag mir Bescheid** — für diesen Schritt brauche ich deine ausdrückliche Freigabe (siehe Freigabe-Block ganz unten), und wir gehen ihn gemeinsam durch.
+</Warning>
+
+<Steps>
+  <Step title="① Airtable-Tarif prüfen (Voraussetzung)">
+    Workspace-Settings → **Billing**: Ist der Tarif mindestens **„Team"**?
+
+    <Warning>
+    Bei **Free** stoppt dieser Schritt — dann ist das getrennte Interface-Teilen nicht verfügbar. In dem Fall: **nicht weitermachen**, sondern mir Bescheid geben (Tarif klären).
+    </Warning>
+  </Step>
+  <Step title="② Ops / Finance zuerst teilen — nur an 3 Personen">
+    `Ops / Finance` → **Share** → **Publish** → Zugriff **ausschließlich** für **Jervin, Pavlo, Nina** (namentlich).
+
+    **Keine** „anyone in workspace"-Freigabe, **kein** öffentlicher Link. (Nina bekommt bewusst die volle Sicht inklusive Honorar — sie ist gleichgestellt.)
+  </Step>
+  <Step title="③ Geld-Isolation prüfen (als Test-Zuschauer)">
+    Mit einem **Nicht-Admin-Test-Konto** (oder als Team-Zuschauer im Inkognito-Fenster) prüfen: Taucht `Ops / Finance` in der Interface-Liste **NICHT** auf?
+
+    <Check>
+    Ops / Finance ist für den Test-Zuschauer **nicht auffindbar** → das Geld bleibt privat. ✅
+    </Check>
+  </Step>
+  <Step title="④ Command-Center Team fürs Team teilen">
+    `Command-Center Team` → **Share** → **Publish** → Zugriff fürs **ganze Team** mit diesen Rollen:
+
+    - **Zuschauer (Standard, spart Plätze):** Assistenz, Freelancer, Cutter, alle übrigen Leser.
+    - **Editor (nur wer operativ ändert):** du, alle Content Strategists (für `status`, `social_profiles`, `notes`, `success_definition`, `content_rules`, Team-Switch), alle Performance-Editoren (für die `te_*`-Felder).
+  </Step>
+  <Step title="⑤ Prüfen: Team sieht KEIN Geld-Feld">
+    Mit dem Team-Test-Zuschauer-Konto `Command-Center Team` öffnen → **alle Reiter** durchgehen → bestätigen: **kein** `monthly_retainer`, **kein** `contract_*`, **kein** `billing_*` sichtbar. (Die liegen nur in Interface B.)
+
+    <Check>
+    Team-Zuschauer sieht in Command-Center Team **kein einziges** Geld-/Vertrags-/Rechnungs-Feld. ✅
+    </Check>
+  </Step>
+  <Step title="⑥ Editor vs. Zuschauer prüfen">
+    - Als **CS-Editor**: lassen sich `status` / `social_profiles` / `notes` / Team-Switch ändern?
+    - Als **PE-Editor**: lassen sich die `te_*`-Felder ändern?
+    - Als **Zuschauer**: sind alle Felder nur lesbar (kein Ändern möglich)?
+  </Step>
+  <Step title="⑦ Team-Test-Run (Adoption-Gate)">
+    **Pavlo + mindestens eine weitere Person** (z. B. ein CS oder Cutter) gehen step-by-step durch ein echtes „Ich nehme Kunde X in Angriff"-Szenario — mit direktem Link zur [Base](https://airtable.com/apppyQoCv1tJS7Dzw):
+
+    1. Kundenprofil eines echten Kunden öffnen → **„Erfasse diesen Kunden in unter 2 Minuten"** (ersetzt es das Notion-Doc?).
+    2. Posting-Liste des Kunden öffnen → letzte Posts + Performance sichtbar und sortierbar?
+    3. Wissen-Reiter + Kontakt-Verlauf lesen → versteht die Person den Kunden?
+    4. (CS) Eine Notiz ändern → greift der Edit?
+    5. Add-Knowledge-Knopf testen → landet der Eintrag?
+    6. Neue-Regel-Formular testen → landet der Eintrag?
+
+    <Check>
+    **Bestanden, wenn:** Pavlo + 1 Person je einen Kunden **ohne Nachfragen** erfassen konnten **und** kein Show-Stopper offen ist. Show-Stopper sofort fixen (zurück ins jeweilige Interface, reiner Klick-Fix). Nice-to-haves → auf die Backlog.
+    </Check>
+  </Step>
+</Steps>
+
+---
+
+<AccordionGroup>
+  <Accordion title="🧪 Lane-A-Freigabe-Block (für den Live-Schalten-Schritt)">
+
+Bevor irgendetwas veröffentlicht/geteilt wird, lege ich dir diesen Block vor und warte auf dein ausdrückliches „Go":
+
+```
+LANE-A-FREIGABE ERFORDERLICH
+Ziel: Zwei Airtable-Interfaces live schalten — "Command-Center Team" fürs ganze Team,
+      "Ops / Finance" nur für Jervin/Pavlo/Nina.
+Betroffene Systeme: Airtable (Base apppyQoCv1tJS7Dzw, Interface-Sharing/Permissions).
+Betroffene Kunden/Daten: Keine Kundendaten werden verändert — es werden Sichten geteilt.
+      Geld-/Vertragsdaten (Honorar, Retainer, Billing) werden für Jervin/Pavlo/Nina
+      sichtbar; das restliche Team sieht sie NICHT.
+Mögliche Nebenwirkungen: Das ganze Team bekommt erstmals Zugriff auf die Base-Sicht
+      (Viewer/Editor). Editoren (CS/PE) können ab dann live Felder ändern (status, te_*,
+      social_profiles, notes, Team-Owner-Links). Keine Webhooks/Automationen werden durch
+      das Teilen ausgelöst.
+Warum sicher: Geld liegt physisch in einem getrennten Interface. Reihenfolge: Ops zuerst
+      eng abriegeln + als Test-Viewer prüfen, dann Team einladen. Feld-Isolation in
+      Interface A vor Team-Einladung verifiziert. Reine Sicht-Freigabe, keine Daten-
+      Mutation, reversibel (Sharing lässt sich zurücknehmen).
+Verifikation danach: (1) Test-Viewer findet Ops/Finance NICHT. (2) Test-Viewer sieht in
+      Command-Center Team kein Geld-Feld. (3) Editor/Viewer-Rollen greifen. (4) Pavlo + 1
+      Mitglied absolvieren den Test-Run ohne Show-Stopper.
+```
+
+Zusätzlich freigabepflichtig: die **exakte Personen-→-Rolle-Liste** (wer Editor, wer Zuschauer). Nina bekommt bewusst die volle Geld-Sicht.
+
+  </Accordion>
+
+  <Accordion title="📋 Technik-Referenz — Field-IDs Kunden-Tabelle (Clients · tblXGErjpjTLdMcYD)">
+
+> Nur für den Technik-Bedarf. Im Bau suchst du nach dem **technischen Namen**, nicht nach der ID.
+
+**Identität & Team**
+
+| Feld | Field-ID | Typ |
+| --- | --- | --- |
+| client_name | fldk607DGsYXMZakH | multilineText (Primary) |
+| company_name | fldidaJBXTqXWwAnp | singleLineText |
+| status | flds4cFVQC7ErN3po | singleSelect |
+| client_emoji | fldgCattqImaq58iq | singleLineText |
+| communication_channel | fldEmYiyi7E2dX3Mf | singleSelect |
+| drive_folder_url | fld4jC5t7qcMD36xi | url |
+| content_strategist | fldI3IpAyRmV4Vm6E | link → Team Members |
+| performance_editor | fldEacVMgRzSjTRGL | link → Team Members |
+| head_of_delivery | fldFVn76KzMAkLR0A | link → Team Members |
+| assistenz | fld2B3Zt17lAH8Wfg | link → Team Members |
+| cs_clickup_id | fldngQuzgJ7jL8uvQ | rollup (nicht ins UI) |
+| pe_clickup_id | fld6TFSBSTzdCErbH | rollup (nicht ins UI) |
+| hod_clickup_id | fldzdzYSYS2C5jMy4 | rollup (nicht ins UI) |
+| assistenz_clickup_id | fldSZle2vVymmNBsr | rollup (nicht ins UI) |
+
+**Marke (Reiter „Marke", alle read-only)**
+
+| Feld | Field-ID | Typ |
+| --- | --- | --- |
+| brand_logo | fldwGG1qEZHMsvrIk | multipleAttachments |
+| brand_guide | fldirhxW3RWwPIJB0 | multipleAttachments |
+| profile_picture | fldYHUclZRWMehghQ | multipleAttachments |
+| brand_colors | fldCPnQ6vRti7jTtO | singleLineText |
+| brand_fonts | fldGjpempKgzon24W | singleLineText (NICHT `_DELETE_brand_fonts_upload` fldsCbaLCXOw9VIKF) |
+| download_links | fld3LjESm8JE45i5T | multilineText |
+
+**Zeit-Schätzungen (alle editierbar, number)**
+
+| Feld | Field-ID |
+| --- | --- |
+| te_strategy_longform | fldFeY20jOVRtMZnV |
+| te_strategy_shortform | fldwVxWEBaW20Ct9P |
+| te_strategy_image | fldLWHYAKUa9CLv1s |
+| te_strategy_text | fldtekRUMp7uETCyF |
+| te_production_longform | fldBrTUi5ydMu1mA3 |
+| te_production_shortform | fldFJm3lWf9lhB1N1 |
+| te_production_image | fld5FbKajABm0bEiQ |
+| te_qc | fld12qsjyqAeF91EH |
+| te_scheduling | fldXJjDHY8w9w0z5t |
+| te_revision | fldEjJWWmRTGkCglY |
+
+**Social, Mengen, Paket**
+
+| Feld | Field-ID | Typ |
+| --- | --- | --- |
+| social_profiles | fldzxjzyqe08kHZdX | multilineText |
+| shortform_per_week | fld84yU5R1Tsh6uBc | number |
+| longform_per_week | fld1bcuQ2qN61AXt4 | number |
+| image_per_week | fldPZGlASpGE7bZ6w | number |
+| text_per_week | fldbMB4mKoRhVX9lr | number |
+| package_slug | fldG13Nu26IgDuHqf | singleLineText |
+| package_link | fldMOTaSXrhbxJnoM | link → Packages |
+| deal_package | fldyKZz0FfW4Lrx06 | singleSelect |
+
+**Wissen (CKS) & Monitoring**
+
+| Feld | Field-ID | Typ |
+| --- | --- | --- |
+| cks_brand_voice | (Reiter „Wissen", read-only) | richText |
+| cks_client_profile / cks_content_rules / cks_strategy / cks_collaboration / cks_learnings_summary / cks_visual_identity | (read-only) | richText |
+| content_rules | — | richText (editierbar) |
+| success_definition | — | multilineText (editierbar) |
+| notes | — | multilineText (editierbar) |
+| Client Learnings | fld8yeQbZUeNTW454 | link → Customer Knowledge |
+| customer_interactions | fldsy4nKPxMbUhFbi | link → Customer Interactions |
+| cks_dirty | fldDBouSz3Ep5fBPI | checkbox |
+| cks_regen_status | fldd539MW93aNMCKJ | singleSelect (running/success/failed) |
+| cks_last_regen_at | fldvCxdYo4et5cQCu | dateTime |
+| last_contacted | fldOqZ4rk9TMU6Pjl | date (auto, 4 Kanäle) |
+
+**Vertrag & Geld (nur Interface B)**
+
+| Feld | Field-ID | Typ |
+| --- | --- | --- |
+| contract_overview | fldziv2rEE6egPk5u | multilineText (Spiegel) |
+| monthly_retainer | fld9KRvU4b3amagoa | currency |
+| payment_cycle | fldGBTRl4MU2q1TFx | singleSelect |
+| start_date | fld5EDDcng6ozccWJ | date |
+| contract_start | flddFUK4usdiwoadY | date |
+| contract_end_date | fldfFIGxEFFZpAnkk | date |
+| contract_duration | fldrMXEj896wMkj2f | number |
+| churn_date | fldikR88t3rvOMtxC | date |
+| churn_opportunity | fldxgeQ3PDs2Pxo56 | date |
+| monthly_cancellation_allowed | fldDLnvemitOYVQSd | checkbox |
+| custom_deliverables | fldWf4xodXvDnc9Q4 | multilineText |
+| **additional_agreements** | **fldSEes8ZL6uOvTQS** | **multilineText (war `zusatzvereinbarungen`)** |
+| tax_id | fldGLGLxiYaH4qGQa | singleLineText |
+| billing_street / city / zip / country | fldjliY9eWUAzQoN0 / fldyNQReD1gNCEvmz / fldmTTN3Rd69Na0j5 / fldZXRPfoBEjVxkjP | singleLineText |
+| backoffice_email | fldR0zAYMrN1dpqgL | email |
+| invoice_email | fldRagxCIeT0IljEt | email |
+| deal_volume_remaining | fldlsP5ebuPRBRdbR | currency (read-only) |
+| upfront_cash | fldrDOCjhM0AhGEEt | formula (read-only) |
+| days_until_contract_end | fldSv9mNr6xRYuFQI | formula (read-only) |
+| contract_signed | fldE6hRYzdMRLIVWR | checkbox (read-only) |
+| easybill_invoice_id | fldLEHRsaLU0eEviZ | number (read-only) |
+| contract_links | fldIZOTSHKlcc1FoX | multilineText |
+
+**Konfiguration (nur Interface B)**
+
+| Feld | Field-ID | Typ |
+| --- | --- | --- |
+| posting_platforms | fldhrrx77idLeqoO8 | multipleSelects |
+| **posting_tool** | **fldrDPAyOJyWvwmYk** | **singleSelect — nur `vista_social` / `zernio`** |
+| zernio_account_ids | fldShETBW1tvmpc4v | multilineText |
+| zernio_profile_id | fldWO9GIGRO3zBLP4 | singleLineText |
+| content_formats | fldtiSfS2lUrmFnL5 | multipleSelects (22 Optionen) |
+| prov_clickup | fldX5wXS0a3DgQeLd | singleSelect |
+| prov_vs | fldTqf8pbRhD83U5W | singleSelect |
+| prov_welcome | fldpcWKEkbZMTqhAw | singleSelect |
+| onboarding_status | fldZMcYBnedktyobl | singleSelect |
+| provisioning_failed_at | fldx1YGYDOt1Wu2s4 | dateTime |
+| close_deal_id | fldKREjUQXMla6vWW | singleLineText |
+| close_lead_id | fldqxoDUNVaXMnhKj | singleLineText |
+| docusign_envelope_id | fldooLnbvlGJIBosw | singleLineText |
+| lead_source | fldbU4NMZSLIZCi4W | singleSelect |
+| referred_by | fldLY1amKByaWRAQW | singleLineText |
+
+**NICHT verwenden (zum Löschen markiert / weglassen)**
+
+| Feld | Field-ID | Grund |
+| --- | --- | --- |
+| _DELETE_deal_volume | fldTIoqdXMGdPQHHU | bereits `_DELETE_` |
+| _DELETE_package | fldTfal5dMVtjPbz8 | bereits `_DELETE_` |
+| billing_state | fldOQ1tdq0yJwWx1z | weglassen (Löschkandidat) |
+| close_opportunity_id | fld64YjrgCFzDEcMs | weglassen (Löschkandidat) |
+| _DELETE_brand_fonts_upload | fldsCbaLCXOw9VIKF | altes Datei-Feld (statt Textfeld `brand_fonts`) |
+| 8× alte Social-Felder, alle `health_*`, alle `*_followers`, alle `vs_*`, `vista_social_profile_ids`, `rules_locked`, `content_type` | — | alle `_DELETE_` |
+
+  </Accordion>
+
+  <Accordion title="📋 Technik-Referenz — Posting-Liste (Content Performance · tblQLlfLvgh81WMla)">
+
+> Filter: `record_type = "Post"` (case-sensitive). Pro-Kunde-Filter über `client`.
+
+| Feld | Field-ID | Typ |
+| --- | --- | --- |
+| date | fldosYyE8OxfaQZ7q | date |
+| network | fldEdoxjQTA8hDSTN | singleSelect (Instagram/YouTube/TikTok/Facebook/LinkedIn/Threads/X/Pinterest) |
+| post_url | fldoEyP7fV5Vp6c7U | url |
+| virality_tier | fldDahGZhYIfcGmAb | singleSelect (Viral/High/Good/Average/Low) |
+| **verdict** | **fldTru2aTOZWRZPMS** | singleSelect (Viral/Solider Hit/Flop … teils leer) |
+| **views_outlier** | **fldI5fTWsN19Fr8j8** | number (QUIO-Kern-Signal) |
+| views | flde7PL1dVfY3m468 | number |
+| likes | fldaRZCnVUUijZWzC | number |
+| er_core | fldbBKP3BGcV6F26p | number |
+| score | fldJtITtnhpZC5CiB | number (teils leer — OK) |
+| verdict_note | fldNA8dELOIb1DrUH | multilineText (teils leer — OK) |
+| record_type | fldIG3SJJhDaFUZWt | singleSelect (Filter = „Post") |
+| client (Link) | fldfJzRkO9QgVvqpV | link → Clients |
+| snapshots | fld4z6yQtIZBywZos | multilineText (NICHT `_DELETE_snapshot_*`) |
+
+> **Hinweis Status-Spalte:** `review_status` (flda4mrQpOvqET5je) ist live **unbrauchbar** für die Posting-Liste (Optionen `due/in_progress/done`, bei Posts leer). Darum **nicht** als Status verwenden — stattdessen die Performance-Signale oben (virality_tier / verdict / views_outlier).
+
+  </Accordion>
+
+  <Accordion title="📋 Technik-Referenz — Add-Knowledge & Neue-Regel (Formulare)">
+
+**Add Knowledge → Customer Knowledge (tblHkpLB4nFzgZeBt)**
+
+| Feld | Field-ID | Typ |
+| --- | --- | --- |
+| client (Link) | fldIVZKxSqRDJfhSJ | link → Clients (Pflicht, visible + hide) |
+| title | fld0axjuhrbG4Hud2 | singleLineText (Primary) |
+| content | fldAJBuY7b4kVs3SJ | richText |
+| knowledge_type | fldGPRB3zsQngy4h9 | singleSelect |
+| Critical | fldgajAZdtfcsxpsm | checkbox |
+| scope | fldDnOe8LEieQDC4m | singleSelect (client/niche/global) |
+| niche_tag | fldJkXs1oQP6y8xS5 | singleLineText |
+| valid_until | fldIwtnQDyANAkHX2 | date |
+| status (per URL `Pending`, hidden) | fldVkM7Rk7xF3k3lU | singleSelect |
+| source_type (per URL `Manual`, hidden) | fldGF7BKy0QYOaIcq | singleSelect |
+
+**Neue Regel → Content Rules Staging (tbl1ZSjtYQTSAjPXW)**
+
+| Feld | Field-ID | Typ |
+| --- | --- | --- |
+| client (Link) | fldjuBZlMtFLe1tFo | link → Clients (Pflicht, visible + hide) |
+| rule_text | fldbbhpRRIYGzNKo8 | multilineText (Primary) |
+| source_type | fldsa6xFGE3ImUBBr | singleSelect (Manual vorhanden) |
+| source_detail | fldMSv0vWtmibiSoz | multilineText |
+| source_quote | fldimcg3paoe3D4Lm | multilineText |
+| **confidence** | **fld6hGFDVC7ouYoFc** | **NICHT verwenden — 22 vermüllte Optionen** |
+
+> Link-Feld auf Clients: „Content Rules Staging" (fldNG5kOxqeQo4CXK).
+
+  </Accordion>
+
+  <Accordion title="📋 Technik-Referenz — Kontakt-Verlauf (Customer Interactions · tblzsB3nDrTJ1mV4f)">
+
+| Feld | Field-ID | Typ |
+| --- | --- | --- |
+| client (Link zurück zu Clients) | fldAVeyXBu78GfwmY | link → Clients |
+| **interaction_title** | **fldH1Wn1W5ViLRSHI** | formula → singleLineText (read-only) |
+| **interaction_type** | **fldLrQiBTTNlg5bE7** | singleSelect (18 Optionen) |
+| summary | fldksq6F1r0dGeEK5 | richText |
+| **interaction_date** | **fldAZAMH1TzLZy1zP** | date (Sortierung DESC) |
+| created_at | fldAgaBH9kFVmd2aq | createdTime |
+| source | fldRuXLn0ucd70WGd | singleSelect |
+| interaction_link | fldEZaW1AjGj1YEBs | url |
+
+> Achtung: 8 `_DELETE_`/`_DEPRECATED_`-Altfelder + 1 Smoke-Feld in dieser Tabelle — beim Picken auf den Präfix achten.
+
+  </Accordion>
+
+  <Accordion title="🔌 Webhook & Infrastruktur (Regen-Knopf)">
+
+- **Route:** `GET /webhooks/cks-regen/{client_id}` (registriert, fail-closed bei leerem Secret, HMAC-constant-time).
+- **`{client_id}`** ist nur der Name des Pfad-Parameters — der Server löst ihn als **Airtable-Record-ID** des Kunden auf. Darum ist **`RECORD_ID()`** in der Button-Formel **korrekt**.
+- **Secret:** `CKS_REGEN_WEBHOOK_SECRET` ist in Railway (`cron-scheduler` / `production`, 64-hex) **bereits gesetzt**. Den **existierenden** Wert einsetzen, **keinen neuen** generieren.
+- **Voller URL-String:**
+  ```
+  "https://quio-automations.up.railway.app/webhooks/cks-regen/" & RECORD_ID() & "?secret=DEIN_SECRET"
+  ```
+
+  </Accordion>
+
+  <Accordion title="🧭 Das WARUM in Kürze (die Entscheidungen dahinter)">
+
+| Entscheidung | Warum |
+| --- | --- |
+| **Zwei getrennte Interfaces** | Airtable kann Felder nicht pro Person verstecken → „Geld privat" nur durch physische Trennung sicher. |
+| **Viewer als Standard** | Spart Editor-Plätze (Kosten); Editor nur, wer operativ ändert (CS / PE / du). |
+| **Ein gemeinsames Kundenprofil** | Zum Start eine Sicht für alle Rollen; getrennte CS-/PE-Fokus-Sichten kommen später additiv, wenn der echte Gebrauch den Bedarf zeigt. |
+| **Felder nach Änderungshäufigkeit** | Oft Gebrauchtes prominent, Selten-Gebrauchtes in Reiter/versteckt — macht einen Kunden in Minuten erfassbar. |
+| **Performance statt Redaktions-Status** in der Posting-Liste | Bei geposteten Inhalten zählt „wie lief's", nicht „ist es freigegeben". Der Redaktions-Status lebt in ClickUp. |
+| **Aufräumen nur im Interface** | Keine Felder gelöscht, keine umbenannt (technische Namen bleiben englisch) — nur ein-/ausblenden + schöner beschriften. |
+
+  </Accordion>
+</AccordionGroup>
+
+---
+
+<Note>
+Wenn du beim Bauen an einer Stelle hängst oder Airtable die Oberfläche anders zeigt als hier beschrieben: kurz Bescheid geben, dann schauen wir gemeinsam drauf. Und denk dran — bis zum Live-Schalten kann nichts kaputtgehen. 💪
+</Note>
