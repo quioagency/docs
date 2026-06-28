@@ -1,122 +1,197 @@
 ---
-title: "Phase-7-Rebuild: Von der flachen zur tiefen Video-Analyse (Fuat & Marta, KW25)"
-description: "Schwarz-auf-weiss-Vergleich Run 1 vs Run 2, TribeV2, Orchestrierung, Persist, Prufungen — der vollstandige Bericht (2026-06-27)"
+title: "Phase-7-Rebuild: Von der flachen zur tiefen Video-Analyse"
+description: "Schwarz-auf-weiss-Vergleich Run 1 vs Run 2, TribeV2, Orchestrierung, Persist — Fuat & Marta KW25 (2026-06-27)"
 ---
 
-## Phase-7-Rebuild — Die Analyse schaut jetzt ins Video
+<Note>
+  **In einem Satz:** Die woechentliche Content-Analyse urteilte bisher nur ueber Ueberschrift, Caption und Zahlen. Jetzt schaut und hoert sie sich jedes Video wirklich an — und das aendert die Urteile messbar.
+</Note>
 
-**Stand:** 2026-06-27 · **Vergleichs-Kunde:** Fuat & Marta, KW25/2026 (17 Content-Pieces) · **run_id (tief):** weekly-fuatmarta-20260627-rerun-deep
+## Das Ergebnis in Zahlen
 
-### Worum es geht (in einem Satz)
-Die woechentliche Content-Analyse urteilte bisher nur ueber Ueberschrift, Caption und Zahlen. Jetzt schaut und hoert sie sich jedes Video wirklich an — und das aendert die Urteile messbar.
+<CardGroup cols={2}>
+  <Card title="Blinde Urteile (degraded)" icon="eye-slash">
+    **17 / 17 → nur noch 2**
 
-### TL;DR
-- Derselbe Lauf (Fuat & Marta, KW25, 17 Content-Pieces) wurde zweimal gefahren: einmal **flach** (der alte Stand) und einmal **tief** (der neue Stand). Nur die Tiefe aendert sich, die Bauform bleibt gleich (fairer Vergleich).
-- **"Blinde" Urteile (degraded): 17 von 17 → nur noch 2** (die 2 sind die einzigen Videos ohne abrufbare Quelle, ehrlich markiert).
-- **Hohe Konfidenz: 0 von 17 → 14 von 17.**
-- Die Urteile begruenden sich jetzt am **echten Video-Inhalt** — und das wurde **unabhaengig Bild-fuer-Bild geprueft**, keine Erfindung.
-- Eine **KI-Experten-Runde (4 Modelle)** hat adversarial gegengeprueft und echten Mehrwert geliefert (sie fing eine Ueber-Interpretation ab).
-- Das Ergebnis ist **gespeichert und live verifiziert**; zwei Wissens-Datenbank-Pruefungen bestanden (eine deckte einen echten Bug auf, der sofort gefixt wurde).
-- Ehrlich offen: die **Hirn-Scan-Schicht (TribeV2)** und das **echte Audio-Transkript** fehlen noch — zwei Folge-Vergleiche, kein Rueckschritt.
+    Die 2 sind die einzigen Videos ohne abrufbare Quelle — ehrlich markiert statt erfunden.
+  </Card>
+  <Card title="Hohe Konfidenz" icon="gauge-high">
+    **0 / 17 → 14 / 17**
+
+    Von "ueberall unsicher" zu fast durchgehend belastbar.
+  </Card>
+  <Card title="Inhalts-Grounding" icon="circle-check">
+    **3 / 3 Bild-fuer-Bild bestaetigt**
+
+    Ein unabhaengiger Pruefer zog die echten Videos — keine Konfabulation.
+  </Card>
+  <Card title="Kosten des Tiefen-Laufs" icon="coins">
+    **~0,30-0,55 USD**
+
+    Weit unter dem Soft-Limit (1,50 USD), dank Cache + Gratis-CLI-Quota.
+  </Card>
+</CardGroup>
+
+<Info>
+  **Lesehilfe:** Derselbe Lauf (Fuat & Marta, KW25, 17 Content-Pieces) wurde zweimal gefahren — einmal **flach** (alt) und einmal **tief** (neu). Gleiche Bauform, nur die Tiefe aendert sich. Das macht den Vergleich fair.
+</Info>
 
 ---
 
-## 1. Das Problem: der "flache" Lauf (Run 1)
+## 1. Das Problem: der flache Lauf (Run 1)
 
-Der erste gegroundete Doktrin-Lauf (Fuat & Marta, KW25, 25. Juni) lief bewusst **ohne** die Tiefen-Schichten. Die sieben Analyse-Brillen urteilten nur ueber **Headline + Caption + Kennzahlen + Doktrin** — nicht ueber den Video-Inhalt. Das Resultat war **17x "degraded"**: bei allen 17 Content-Pieces fehlten die Schichten *Visuelles*, *Rhetorik* und *Text*. Die Analyse war also gut in den Zahlen, aber blind fuer das, was im Video tatsaechlich passiert. Genau das war der Anlass fuer den Rebuild: die Tiefe bauen, scharfschalten, und denselben Lauf nochmal fahren — um schwarz-auf-weiss zu sehen, ob es wirkt.
-
----
+Der erste gegroundete Lauf (25. Juni) urteilte nur ueber **Headline + Caption + Kennzahlen + Doktrin** — nicht ueber den Video-Inhalt. Ergebnis: **17x "degraded"**. Bei allen 17 Pieces fehlten die Schichten *Visuelles*, *Rhetorik* und *Text*. Gut in den Zahlen, aber blind fuer das, was im Video passiert. Genau das war der Anlass fuer den Rebuild.
 
 ## 2. Der Vergleich: Run 1 (flach) vs Run 2 (tief)
 
-Beide Laeufe: derselbe Kunde, dieselbe Woche, dieselben 27 Posts / 17 Content-Pieces, dieselbe Bauform (Workflow + viele Sub-Agenten). **Nur die Tiefe aendert sich.**
-
 | Messpunkt | Run 1 (flach) | Run 2 (tief) |
-|---|---|---|
-| Visuelles (was auf dem Bildschirm passiert) | degraded 17 / 17 | **present 15 / 17** |
-| Rhetorik (wie argumentiert/gesprochen wird) | degraded 17 / 17 | **present 15 / 17** |
-| Text (Hook/Argument/CTA) | degraded 17 / 17 | **present 17 / 17** |
-| Hirn-Scan (TribeV2) | degraded 17 / 17 | degraded 17 / 17 *(bewusst, siehe Teil 4)* |
+| --- | :---: | :---: |
+| Visuelles (was auf dem Bildschirm passiert) | degraded 17/17 | **present 15/17** |
+| Rhetorik (wie argumentiert/gesprochen wird) | degraded 17/17 | **present 15/17** |
+| Text (Hook / Argument / CTA) | degraded 17/17 | **present 17/17** |
+| Hirn-Scan (TribeV2) | degraded 17/17 | degraded 17/17 *(bewusst, Teil 4)* |
 | Urteile mit hoher Konfidenz | 0 von 17 | **14 von 17** |
 
-**Das "17x degraded" ist weg.** Geflippt von "blind" auf "gesehen": Visuelles + Rhetorik bei 15 von 17, Text bei allen 17. Die **2 verbleibenden** Pieces ("Kredite Neu", "Steuerfrei verkaufen") sind die einzigen ohne abrufbares Quell-Video — sie bleiben ehrlich "degraded" statt einen Befund zu erfinden.
+<Check>
+  **Das "17x degraded" ist weg.** Visuelles + Rhetorik flippten auf 15/17 von "blind" auf "gesehen", Text auf alle 17.
+</Check>
 
-### Drei konkrete Beispiele: das Urteil aendert sich am echten Inhalt
+### Drei Beispiele: das Urteil aendert sich am echten Inhalt
 
-**"Kein CEO konnte das ablehnen"** (viral 7.62)
-- *Run 1:* "Solider Hit / Distribution" — geraten aus der Headline, Visuelles + Rhetorik degraded.
-- *Run 2:* erkennt einen **Buehnen-Talk-Ausschnitt** (Sprecher im Anzug, Ansteck-Mikro, Papiere) mit animiertem **Lager-Roboter-B-Roll** und eingeblendeten Narrations-Overlays → Urteil "viral durch Merit", Konfidenz hoch.
+<AccordionGroup>
+  <Accordion title="'Kein CEO konnte das ablehnen' (viral 7.62)" icon="microphone">
+    **Run 1:** "Solider Hit / Distribution" — geraten aus der Headline, Visuelles + Rhetorik degraded.
 
-**"Wie Amazon so gross wurde"**
-- *Run 1:* "reine Themen-Ansage, 0 Shares".
-- *Run 2:* liest das eingeblendete Overlay **"BILANZGEWINN AUSZUWEISEN WAERE DUMM. WIR REINVESTIEREN…"** plus Amazon-Logistik-Luftaufnahmen, DHL-Trucks und einen **Job-/Funnel-Banner ("Kommentiere mit FREIHEIT")** → erklaert damit die Reichweite-ohne-Shares als distribution-/funnel-getrieben. Ein **besser begruendetes** Urteil als vorher.
+    **Run 2:** erkennt einen **Buehnen-Talk-Ausschnitt** (Sprecher im Anzug, Ansteck-Mikro, Papiere) mit animiertem **Lager-Roboter-B-Roll** und eingeblendeten Narrations-Overlays → Urteil "viral durch Merit", Konfidenz hoch.
+  </Accordion>
+  <Accordion title="'Wie Amazon so gross wurde'" icon="box">
+    **Run 1:** "reine Themen-Ansage, 0 Shares".
 
-**"Gold"** (viral 6.28)
-- *Run 1:* Caption-Urteil.
-- *Run 2:* sieht das Luxus-Villa-mit-Pool-Setting, **brennende Geldscheine** synchron zum Inflations-Argument, das Overlay "DU WIRST NICHT FINANZIELL FREI MIT EDELMETALLEN" und den echten Hook "Jetzt Gold kaufen? Bullshit" → "viral durch Merit", Konfidenz hoch.
+    **Run 2:** liest das Overlay **"BILANZGEWINN AUSZUWEISEN WAERE DUMM. WIR REINVESTIEREN…"** plus Amazon-Logistik-Luftaufnahmen, DHL-Trucks und einen **Funnel-Banner ("Kommentiere mit FREIHEIT")** → erklaert die Reichweite-ohne-Shares als distribution-/funnel-getrieben. Ein **besser begruendetes** Urteil als vorher.
+  </Accordion>
+  <Accordion title="'Gold' (viral 6.28)" icon="fire">
+    **Run 1:** Caption-Urteil.
+
+    **Run 2:** sieht das Luxus-Villa-mit-Pool-Setting, **brennende Geldscheine** synchron zum Inflations-Argument, das Overlay "DU WIRST NICHT FINANZIELL FREI MIT EDELMETALLEN" und den Hook "Jetzt Gold kaufen? Bullshit" → "viral durch Merit", Konfidenz hoch.
+  </Accordion>
+</AccordionGroup>
 
 ---
 
-## 3. Wie die Analyse jetzt funktioniert (die Tiefe)
+## 3. Wie die Analyse jetzt funktioniert
 
 Pro ausgewaehltem Outlier-Video laufen mehrere Schichten parallel:
 
-- **Visuelles** (Gemini): Schnitt, Setting, Headline-Overlays/OCR, B-Roll, organisch vs. werblich.
-- **Rhetorik** (Gemini): Hook, Argumentationsaufbau, Tonalitaet, Call-to-Action.
-- **Text / Transkript:** der gesprochene/eingeblendete Text als Grundlage (Hinweis: in diesem Lauf kam die Text-Spur aus der Caption/Skript-Kopie, nicht aus einem echten Audio-Transkript — siehe Grenzen, Teil 7).
-- **Customer-Interactions-Volltiefe:** der Skill liest jetzt alle Kunden-Interaktions-Felder und zieht pro Content-Piece die zugehoerige Team-Diskussion (ClickUp-Aufgabe + Slack/Fellow) — und **challengt** Team-Entscheidungen gegen die echte Performance ("wer hatte recht?").
-- **Transkript-Kaskade:** falls ein Transkript fehlt, greift eine Fallback-Kette (Airtable-Posting-Log → ClickUp → AssemblyAI → WhisperX) statt einfach aufzugeben.
-- **Degraded-Disziplin:** faellt eine Schicht oder Quelle aus, wird der Slot ehrlich als "degraded" markiert — **nie** ein Befund erfunden, und der Lauf bricht nie ab.
+<CardGroup cols={2}>
+  <Card title="Visuelles" icon="eye">
+    Schnitt, Setting, Headline-Overlays (OCR), B-Roll, organisch vs. werblich.
+  </Card>
+  <Card title="Rhetorik" icon="comment">
+    Hook, Argumentationsaufbau, Tonalitaet, Call-to-Action.
+  </Card>
+  <Card title="Text / Transkript" icon="file-lines">
+    Der gesprochene/eingeblendete Text als Grundlage. *(In diesem Lauf aus der Caption/Skript-Kopie — siehe Grenzen, Teil 7.)*
+  </Card>
+  <Card title="Customer-Interactions-Volltiefe" icon="people-group">
+    Alle Kunden-Interaktions-Felder + pro Piece die Team-Diskussion (ClickUp + Slack/Fellow) — und der Skill **challengt** Team-Entscheidungen gegen die echte Performance ("wer hatte recht?").
+  </Card>
+</CardGroup>
 
-**Robustheit-Befund am Rande:** Beim ersten echten Gemini-Aufruf flog ein versteckter Produktions-Fehler auf — die Zeitgrenze fuer Video-Aufrufe stand versehentlich auf **0,18 Sekunden** statt 180 Sekunden (das SDK rechnet in Millisekunden). Das haette **jeden** Video-Aufruf ueber den Notfall-Weg sofort abgebrochen. Gefixt + getestet — genau dafuer ist ein echter Test da, ein Mock-Test haette das nie gezeigt.
+<Tip>
+  **Degraded-Disziplin:** Faellt eine Schicht oder Quelle aus, wird der Slot ehrlich "degraded" markiert — **nie** ein Befund erfunden, und der Lauf bricht nie ab. Eine Transkript-Fallback-Kaskade (Airtable → ClickUp → AssemblyAI → WhisperX) springt ein, wenn ein Transkript fehlt.
+</Tip>
+
+<Warning>
+  **Robustheit-Befund:** Beim ersten echten Gemini-Aufruf flog ein versteckter Produktions-Fehler auf — die Zeitgrenze stand auf **0,18 Sekunden** statt 180 (das SDK rechnet in Millisekunden). Das haette **jeden** Video-Aufruf ueber den Notfall-Weg sofort abgebrochen. Gefixt + getestet — genau dafuer ist ein echter Test da; ein Mock haette das nie gezeigt.
+</Warning>
 
 ---
 
-## 4. TribeV2 — die Hirn-Scan-Engine (Stand + warum noch "degraded")
+## 4. TribeV2 — die Hirn-Scan-Engine
 
-**Was es ist:** TribeV2 ("TRImodal Brain Encoder") ist ein trainiertes Modell, das aus Video + Audio + Text eine modellierte Hirn-Reaktion ableitet (Yeo-7-Netzwerke: u.a. Hook, Retention, Resonanz, Emotion, CTA). Es laeuft auf Modal (GPU). Es ist die bewusst gewaehlte zentrale Engine — gegen die Empfehlung einer Modell-Vergleichs-Recherche, mit akzeptiertem Lizenz-Risiko (CC-BY-NC; vor echtem Kunden-Einsatz bleibt eine anwaltliche/Meta-Klaerung empfohlen).
+<Info>
+  **Was es ist:** TribeV2 ("TRImodal Brain Encoder") leitet aus Video + Audio + Text eine modellierte Hirn-Reaktion ab (Yeo-7-Netzwerke: u.a. Hook, Retention, Resonanz, Emotion, CTA), laeuft auf Modal (GPU). Bewusst gewaehlte zentrale Engine — mit akzeptiertem Lizenz-Risiko (CC-BY-NC; vor echtem Kunden-Einsatz bleibt eine anwaltliche Klaerung empfohlen).
+</Info>
 
-**Was es fuer QUIO nutzbar macht — der Moat:** nicht die Roh-Hirndaten selbst, sondern die **Kalibrierung gegen QUIOs echte per-Konto-Outlier-Scores**. Die TribeV2-Ausgabe sind die *Merkmale*, die echten Outlier-Werte des Kontos die *Labels* → eine leichte per-Konto-Regression macht aus "Durchschnittshirn" ein konto-spezifisches Signal. Ohne diese Kalibrierung waere TribeV2 nur generisch.
+**Der Moat:** nicht die Roh-Hirndaten selbst, sondern die **Kalibrierung gegen QUIOs echte per-Konto-Outlier-Scores**. TribeV2-Ausgabe = die *Merkmale*, eure Outlier-Werte = die *Labels* → eine leichte per-Konto-Regression macht aus "Durchschnittshirn" ein konto-spezifisches Signal.
 
-**Was in diesem Rebuild gebaut wurde:** der komplette Code steht und ist getestet —
-- ein **Modal-Client** (ruft die Engine auf, fuettert die Text-Spur aus der Kaskade rein),
-- eine **QUIO-Brille** (uebersetzt die Roh-Hirndaten in 5 lesbare Urteile mit Zeit-Bezug, ohne den 5-Sekunden-Versatz),
-- die **per-Konto-Kalibrierung** (Ridge-Regression gegen die Outlier-z-Scores, mit ehrlichem "kein Signal"-Marker statt Schoenfaerberei),
-- alles **degraded-sicher** verdrahtet, damit der Wochenbericht nie bricht, wenn Modal aus ist.
+**Gebaut + getestet (steht):**
 
-**Warum noch "degraded":** der Modal-Endpoint ist (a) nur via Testlauf angelegt, **nicht deployt** (keine aufrufbare Funktion), und (b) nimmt die Text-Spur (`transcript_text`) noch nicht an. Beides sitzt in der externen TribeV2-Engine-Datei (ausserhalb dieses Systems). Solange das nicht deployt + erweitert ist, bleibt die Hirn-Scan-Schicht ehrlich "degraded". **Kein Rueckschritt** — ein Folge-Vergleich zieht TribeV2 nach, sobald der Endpoint steht.
+<Steps>
+  <Step title="Modal-Client">
+    Ruft die Engine auf, fuettert die Text-Spur aus der Kaskade rein.
+  </Step>
+  <Step title="QUIO-Brille">
+    Uebersetzt die Roh-Hirndaten in 5 lesbare Urteile mit Zeit-Bezug (ohne den 5-Sekunden-Versatz).
+  </Step>
+  <Step title="Per-Konto-Kalibrierung">
+    Ridge-Regression gegen die Outlier-z-Scores, mit ehrlichem "kein Signal"-Marker statt Schoenfaerberei.
+  </Step>
+</Steps>
+
+<Warning>
+  **Warum noch "degraded":** Der Modal-Endpoint ist (a) nur via Testlauf angelegt, **nicht deployt** (keine aufrufbare Funktion), und (b) nimmt die Text-Spur noch nicht an. Beides sitzt in der externen TribeV2-Engine-Datei. Solange das nicht deployt + erweitert ist, bleibt die Hirn-Scan-Schicht ehrlich "degraded" — **kein Rueckschritt**, ein Folge-Vergleich zieht sie nach.
+</Warning>
 
 ---
 
 ## 5. Wie es gebaut + geprueft wurde (Orchestrierung)
 
-Der ganze Rebuild lief **maximal orchestriert** — die Hauptsession blieb duenn, die schwere Arbeit lag in Sub-Agenten und Workflows, jeder Schritt nachvollziehbar ("glaeserner Lauf").
+Der ganze Rebuild lief **maximal orchestriert** — Hauptsession duenn, die schwere Arbeit in Sub-Agenten und Workflows, jeder Schritt nachvollziehbar ("glaeserner Lauf").
 
-- **Recon-Workflow:** 13 parallele Agenten lasen alle Bau-Plaene und erstellten eine praezise Ausfuehrungs-Karte (welche Datei, welche Reihenfolge, was kann parallel).
-- **Lane-B-Bau-Workflow:** 6 parallele Bau-Agenten bauten die risikofreien Bausteine gleichzeitig (disjunkte Dateien, keine Kollision), gefolgt von einem **frischen, unabhaengigen Pruefer** (alle Tests gruen, Linter/Typchecker sauber, Workstream-Sicherheit bestaetigt).
-- **Spezialisten pro heikler Schritt:** ein Railway-Spezialist fuer den Cron-Deploy, ein Gemini-Spezialist fuer die Aktivierung + den ersten bezahlten Test, ein TribeV2-Spezialist, ein Re-Run-Dirigent, ein Grounding-Pruefer, ein Persist-Executor — jeder mit hartem Kosten-Limit und der Regel "im Zweifel stoppen + melden, nichts erzwingen".
-- **Der Tiefen-Lauf selbst** lief in der gleichen Bauform wie der Baseline-Lauf (Workflow + viele Sub-Agenten: 17 Pieces x 7 Brillen = 119 Brillen-Urteile + 17 "Chairman"-Synthesen) — nur angereichert, nicht verschlankt. Damit ist der Vergleich fair.
+<Steps>
+  <Step title="Recon-Workflow (13 Agenten)" icon="magnifying-glass">
+    Lasen alle Bau-Plaene parallel und erstellten eine praezise Ausfuehrungs-Karte (welche Datei, welche Reihenfolge, was parallel).
+  </Step>
+  <Step title="Lane-B-Bau-Workflow (6 parallel)" icon="screwdriver-wrench">
+    6 Bau-Agenten bauten die risikofreien Bausteine gleichzeitig (disjunkte Dateien), gefolgt von einem **frischen, unabhaengigen Pruefer** (alle Tests gruen, Linter/Typchecker sauber).
+  </Step>
+  <Step title="Spezialisten pro heikler Schritt" icon="user-gear">
+    Railway-Deploy, Gemini-Aktivierung, TribeV2, Re-Run-Dirigent, Grounding-Pruefer, Persist-Executor — jeder mit hartem Kosten-Limit und der Regel "im Zweifel stoppen + melden".
+  </Step>
+  <Step title="Der Tiefen-Lauf" icon="layer-group">
+    Gleiche Bauform wie die Baseline (17 Pieces x 7 Brillen = 119 Brillen-Urteile + 17 Synthesen) — nur angereichert, nicht verschlankt. Damit ist der Vergleich fair.
+  </Step>
+</Steps>
 
 ### Die KI-Experten-Runde (llm-council)
-Genau **einmal** ganz am Schluss lief eine Runde mit 4 Frontier-Modellen ueber das Gesamt-Ergebnis (nie pro Video — das waere teure API-Verschwendung). Sie war **kein Abnicken**: sie fing eine **Ueber-Interpretation** (den Amazon-"distribution"-Kausal-Schluss), warnte vor dem auffaellig glatten Konfidenz-Sprung und vor der Gefahr, dass ein Modell gesprochenen Text faelschlich als Bildschirm-Text ausgibt. Ihr Fazit: "nicht ungeprueft speichern — erst die eingeblendeten Texte gegen echte Bilder pruefen".
+
+Genau **einmal** am Schluss lief eine Runde mit 4 Frontier-Modellen ueber das Gesamt-Ergebnis (nie pro Video). Sie war **kein Abnicken**: sie fing eine **Ueber-Interpretation** (den Amazon-Kausal-Schluss), warnte vor dem glatten Konfidenz-Sprung und vor der Gefahr, gesprochenen Text faelschlich als Bildschirm-Text auszugeben. Fazit: "nicht ungeprueft speichern — erst die eingeblendeten Texte gegen echte Bilder pruefen".
 
 ### Der Grounding-Check (die entscheidende Pruefung)
-Genau das wurde gemacht: ein unabhaengiger Pruefer **zog die echten Videos** (yt-dlp + ffmpeg + Texterkennung) und bestaetigte **3 von 3** geprueften Behauptungen **Bild fuer Bild**: das "BILANZGEWINN…"-Overlay, das "DU WIRST NICHT FINANZIELL FREI…"-Overlay, die **brennenden Euro-Scheine** (sichtbare Seriennummern) und das **Roboter-Lager bei exakt Sekunde 16-18**. Der vom Council als verdaechtig markierte Zeitstempel war **korrekt**. Ergebnis: **keine Konfabulation** — die Tiefe sieht den Bildschirm wirklich.
+
+<Check>
+  Ein unabhaengiger Pruefer **zog die echten Videos** (yt-dlp + ffmpeg + Texterkennung) und bestaetigte **3 von 3** Behauptungen **Bild fuer Bild**: das "BILANZGEWINN…"-Overlay, das "DU WIRST NICHT FINANZIELL FREI…"-Overlay, die **brennenden Euro-Scheine** (sichtbare Seriennummern) und das **Roboter-Lager bei exakt Sekunde 16-18**. Der vom Council als verdaechtig markierte Zeitstempel war **korrekt**. → Keine Konfabulation, die Tiefe sieht den Bildschirm wirklich.
+</Check>
 
 ---
 
-## 6. Was gespeichert wurde + die Pruefungen (Persist)
+## 6. Was gespeichert wurde + die Pruefungen
 
-Erst **nach** bestandenem Vergleich + Council + Grounding-Check wurde gespeichert — und das in der Reihenfolge **Trockenlauf → scharf → live nachpruefen**:
+Erst **nach** bestandenem Vergleich + Council + Grounding-Check wurde gespeichert — in der Reihenfolge **Trockenlauf → scharf → live nachpruefen**.
 
-- **Trockenlauf sauber:** 17 Analyse-Bloecke + 27 Plattform-Datensaetze, Schema fehlerfrei.
-- **Scharf gespeichert:** ein Review-Datensatz + 17 Content-Pieces → 27 Plattform-Records in Airtable.
-- **Live nachgeprueft:** die geteilte Analyse ist je Content-Piece **identisch** ueber alle Plattform-Datensaetze, die plattform-spezifischen Kennzahlen unterscheiden sich korrekt, und die menschliche Spalte (Veroeffentlichungs-Kontext) wurde **nie** vom Skill beschrieben.
-- **Ehrliche Marker im Datensatz** (auf Empfehlung des Council): Herkunft = KI-multimodal, "menschlich geprueft = nein", Konfidenz als "KI-abgeleitet" gekennzeichnet, plus ein Modalitaets-Hinweis (Text = Caption/Skript, kein Audio-Transkript; TribeV2 degraded).
+<Steps>
+  <Step title="Trockenlauf sauber">
+    17 Analyse-Bloecke + 27 Plattform-Datensaetze, Schema fehlerfrei.
+  </Step>
+  <Step title="Scharf gespeichert">
+    Ein Review-Datensatz + 17 Content-Pieces → 27 Plattform-Records in Airtable.
+  </Step>
+  <Step title="Live nachgeprueft">
+    Die geteilte Analyse ist je Piece **identisch** ueber alle Plattform-Datensaetze, die plattform-spezifischen Kennzahlen unterscheiden sich korrekt, und die menschliche Spalte (Veroeffentlichungs-Kontext) wurde **nie** vom Skill beschrieben.
+  </Step>
+</Steps>
 
-**Zwei Wissens-Datenbank-Pruefungen:**
-- *Zaehler bewegt sich:* ein neuer, gut belegter Lern-Eintrag wurde geschrieben, der Zaehler stieg korrekt in beiden Speichern (Airtable + Vektor-DB) — **bestanden**.
-- *Widerrufenes Prinzip faellt aus dem Abruf:* hier kam ein **echter Bug** ans Licht — das Widerrufen eines Prinzips wirkte nur in Airtable, nicht in der Vektor-DB, also blieb das Prinzip im Abruf. Der Pruefer hat das **nicht gruen geschummelt** und **kein produktives Prinzip angefasst** (nur ein Wegwerf-Testprinzip, danach geloescht). Der Bug wurde **sofort gefixt + getestet**, danach faellt ein widerrufenes Prinzip korrekt aus dem Abruf — **bestanden**. Die 706 produktiven Doktrin-Eintraege blieben unberuehrt.
+Auf Council-Empfehlung tragen die Datensaetze **ehrliche Marker**: Herkunft = KI-multimodal, "menschlich geprueft = nein", Konfidenz als "KI-abgeleitet", plus ein Modalitaets-Hinweis (Text = Caption/Skript; TribeV2 degraded).
+
+<AccordionGroup>
+  <Accordion title="Wissens-DB-Pruefung 1: Zaehler bewegt sich — BESTANDEN" icon="circle-check">
+    Ein neuer, gut belegter Lern-Eintrag wurde geschrieben; der Zaehler stieg korrekt in beiden Speichern (Airtable + Vektor-DB).
+  </Accordion>
+  <Accordion title="Wissens-DB-Pruefung 2: widerrufenes Prinzip faellt aus dem Abruf — BUG gefunden + gefixt" icon="bug">
+    Hier kam ein **echter Bug** ans Licht: das Widerrufen eines Prinzips wirkte nur in Airtable, nicht in der Vektor-DB — das Prinzip blieb im Abruf. Der Pruefer hat das **nicht gruen geschummelt** und **kein produktives Prinzip angefasst** (nur ein Wegwerf-Testprinzip, danach geloescht). Der Bug wurde **sofort gefixt + getestet**, danach faellt ein widerrufenes Prinzip korrekt aus dem Abruf — **bestanden**. Die 706 produktiven Doktrin-Eintraege blieben unberuehrt.
+  </Accordion>
+</AccordionGroup>
 
 ---
 
@@ -124,20 +199,34 @@ Erst **nach** bestandenem Vergleich + Council + Grounding-Check wurde gespeicher
 
 Das Visuelle (der eigentliche, Bild-bestaetigte Gewinn) ist live und bewiesen. Drei Dinge sind bewusst noch offen — **kein Rueckschritt**, sondern naechste Vergleiche:
 
-1. **TribeV2 "im 1. Vergleich" nachziehen** — der externe Modal-Endpoint muss deployt und um die Text-Spur erweitert werden (ML-Arbeit an der externen Engine). Dann laeuft ein Folge-Vergleich **mit** der Hirn-Scan-Schicht.
-2. **Echtes Audio-Transkript** statt Caption/Skript fuer die volle Drei-Modalitaet (das Posting-Log hatte fuer diesen Kunden keins). Das visuelle Tiefen-Ergebnis ist davon unberuehrt.
-3. **Langvideo↔Kurzclip-Verknuepfung** in Airtable ist noch leer → die "Welches Original gehoert zu diesem Short"-Auswertung (Delta) bleibt bis zur Befuellung "degraded".
-
-Kleinere offene Punkte: das Quell-Material-Feld am Posting-Log (technische Entscheidung), und — auf Council-Empfehlung fuer die kunden-fertige Schicht — ein standardisiertes Vokabular + eine Stichproben-Pruefung durch einen Menschen, bevor solche Analysen als "final" gelten (die kundenfertige Report-Lesbarkeit ist ohnehin als eigener Schritt vorgesehen).
+<CardGroup cols={3}>
+  <Card title="TribeV2 nachziehen" icon="brain">
+    Externer Modal-Endpoint deployen + um die Text-Spur erweitern → Folge-Vergleich **mit** Hirn-Scan-Schicht.
+  </Card>
+  <Card title="Echtes Audio-Transkript" icon="waveform-lines">
+    Statt Caption/Skript fuer die volle Drei-Modalitaet (das Posting-Log hatte fuer diesen Kunden keins). Das visuelle Ergebnis ist davon unberuehrt.
+  </Card>
+  <Card title="Langvideo↔Kurzclip-Link" icon="link">
+    In Airtable noch leer → die "welches Original gehoert zu diesem Short"-Auswertung (Delta) bleibt bis zur Befuellung degraded.
+  </Card>
+</CardGroup>
 
 ---
 
 ## Anhang — Tech-Details
 
-- **Kosten:** der Tiefen-Lauf lag bei rund **0,30-0,55 USD** (26 Gemini-Calls, kurze Videos, Cache je Content-Piece) — weit unter dem Soft-Limit von 1,50 USD. Die Antigravity-CLI laeuft auf Gratis-Quota (Primaer-Weg); nur der API-Fallback kostet. Der erste Cron-Deploy + die Gemini-Aktivierung lagen im Cent-Bereich. Die Council-Runde = 4 Modelle x 1 Runde.
-- **Modelle:** Gemini fuer Video/Text-Anreicherung (Antigravity-CLI = Gemini 3.1 Pro primaer, Gemini-API = Pflicht-Fallback), Opus/Sonnet fuer Brillen + Synthese, 4 Frontier-Modelle im Council.
-- **Bauform-Beleg (fairer Vergleich):** beide Laeufe im Workflow-Modus, gleiche Every-Video-Faecherung; der angereicherte "glaeserne Lauf"-Trace protokolliert Tools/Modelle/Sub-Agenten-Anzahl je Stufe.
-- **Sicherheit:** der einzige Server-Push war ein einzelner, chirurgischer Commit (der Tages-Cron) auf den geteilten Haupt-Stand; alles andere liegt lokal. Parallele Arbeit eines anderen Fensters wurde durchgehend nicht angefasst, der Vergleichs-Baseline-Lauf nie ueberschrieben, der Speicher-Vorgang an das bestehende Schema gebunden (kein neues Schema), mit Test-Identitaet.
-- **Datengrundlage:** Vergleichs-Lauf weekly-fuatmarta-20260627-rerun-deep gegen Baseline weekly-fuatmarta-20260625-fr2; Belege je Plan als SUMMARY + die Dokumente RERUN-DIFF / COUNCIL / PERSIST-VERIFICATION.
+<AccordionGroup>
+  <Accordion title="Kosten + Modelle" icon="coins">
+    Tiefen-Lauf ~0,30-0,55 USD (26 Gemini-Calls, kurze Videos, Cache je Piece; Antigravity-CLI = Gratis-Quota primaer, API = Pflicht-Fallback). Cron-Deploy + Gemini-Aktivierung im Cent-Bereich. Council = 4 Modelle x 1 Runde. Modelle: Gemini (CLI = 3.1 Pro primaer, API-Fallback) fuer Video/Text, Opus/Sonnet fuer Brillen + Synthese, 4 Frontier-Modelle im Council.
+  </Accordion>
+  <Accordion title="Fairness + Sicherheit" icon="shield-check">
+    Beide Laeufe im Workflow-Modus, gleiche Every-Video-Faecherung; der "glaeserne Lauf"-Trace protokolliert Tools/Modelle/Sub-Agenten-Anzahl je Stufe. Der einzige Server-Push war ein einzelner chirurgischer Commit (der Tages-Cron); alles andere lokal. Parallele Arbeit eines anderen Fensters nie angefasst, der Baseline-Lauf nie ueberschrieben, der Speicher an das bestehende Schema gebunden, mit Test-Identitaet.
+  </Accordion>
+  <Accordion title="Datengrundlage" icon="database">
+    Vergleichs-Lauf `weekly-fuatmarta-20260627-rerun-deep` gegen Baseline `weekly-fuatmarta-20260625-fr2`. Belege je Plan als SUMMARY + die Dokumente RERUN-DIFF / COUNCIL / PERSIST-VERIFICATION.
+  </Accordion>
+</AccordionGroup>
 
-*Dieser Bericht beschreibt einen internen Test-/Vergleichs-Lauf auf einer Vergleichs-Identitaet; er dokumentiert die Methode + das Ergebnis des Rebuilds, nicht ein outward-facing Kunden-Deliverable.*
+<Note>
+  Dieser Bericht beschreibt einen internen Test-/Vergleichs-Lauf auf einer Vergleichs-Identitaet — er dokumentiert die Methode + das Ergebnis des Rebuilds, kein outward-facing Kunden-Deliverable.
+</Note>
